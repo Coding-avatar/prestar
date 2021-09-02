@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -11,9 +10,7 @@ class MyUser {
   final String photoUrl;
   final String displayName;
   MyUser(
-      {required this.uid,
-        required this.photoUrl,
-        required this.displayName});
+      {required this.uid, required this.photoUrl, required this.displayName});
 }
 
 abstract class AuthBase {
@@ -33,7 +30,7 @@ class Auth implements AuthBase {
   late SharedPreferences _preferences;
   final _firebaseAuth = FirebaseAuth.instance;
   final CollectionReference userReference =
-  FirebaseFirestore.instance.collection('users');
+      FirebaseFirestore.instance.collection('users');
   createUser({uid, name, photoUrl, email}) async {
     await userReference
         .doc(uid)
@@ -55,7 +52,9 @@ class Auth implements AuthBase {
             : user.photoURL,
         uid: user.uid);
     return MyUser(
-        uid: user.uid, photoUrl: user.photoURL??'', displayName: user.displayName??'');
+        uid: user.uid,
+        photoUrl: user.photoURL ?? '',
+        displayName: user.displayName ?? '');
   }
 
   @override

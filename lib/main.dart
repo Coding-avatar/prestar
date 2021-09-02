@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'file:///D:/Current%20Project/prestar/lib/views/screens/LoginScreen.dart';
+import 'package:prestar/views/screens/LoginScreen.dart';
+import 'package:prestar/views/screens/ProfileScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.indigo,
       ),
-      home: LoginScreen(),
+      home: ProfileScreen(),
     );
   }
 }
