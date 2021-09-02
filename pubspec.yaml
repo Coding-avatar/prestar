@@ -29,6 +29,7 @@ dependencies:
   cloud_firestore: ^2.5.1
   google_sign_in: ^5.0.7
   shared_preferences: ^2.0.7
+  otp_text_field: ^1.1.1
 
 
 
