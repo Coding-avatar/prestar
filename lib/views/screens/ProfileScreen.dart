@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:prestar/views/screens/videoPost.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -199,34 +200,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         Container(
                           width: double.infinity,
-                          padding: EdgeInsets.symmetric(vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
                           color: Colors.white,
                           child: Column(
                             children: [
+                              Divider(),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('56 videos'),
+                                  Text(
+                                    '56 Videos',
+                                    style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xff092497)),
+                                  ),
                                   IconButton(
                                     onPressed: null,
-                                    icon: Icon(
-                                      Icons.search,
-                                      size: 25,
-                                    ),
+                                    icon: Icon(Icons.search,
+                                        size: 30, color: Color(0xff092497)),
                                   ),
                                 ],
                               ),
-                              ListView(
-                                children: [
-                                  Card(
-                                    child: Container(
-                                      width: double.infinity,
-                                      height: 50,
-                                      color: Colors.grey,
-                                    ),
-                                  )
-                                ],
+                              Expanded(
+                                child: ListView(
+                                  children: [
+                                    VideoPost(),
+                                  ],
+                                ),
                               )
                             ],
                           ),
