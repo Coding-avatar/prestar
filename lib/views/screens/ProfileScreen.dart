@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -39,101 +40,133 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
-                    width: double.infinity,
-                    height: screenHeight / 3,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage("assets/images/cover2.jpg"),
-                          fit: BoxFit.cover),
-                    ),
-                    alignment: Alignment.center,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 40,
+                  Stack(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: screenHeight / 3,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage("assets/images/cover2.jpg"),
+                              fit: BoxFit.cover),
                         ),
-                        Stack(
+                        alignment: Alignment.center,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            CircleAvatar(
-                              backgroundImage:
-                                  AssetImage("assets/images/profile1.jpg"),
-                              radius: 55,
+                            SizedBox(
+                              height: 40,
                             ),
-                            PositionedDirectional(
-                              bottom: 10,
-                              end: 15,
-                              child: Icon(
-                                Icons.add_a_photo,
-                                color: Colors.white60,
+                            Stack(
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage("assets/images/profile2.jpg"),
+                                  radius: 55,
+                                ),
+                                PositionedDirectional(
+                                  bottom: 10,
+                                  end: 15,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Color(0xffcdcdcd),
+                                            blurRadius: 5.0,
+                                          ),
+                                        ]),
+                                    child: Icon(
+                                      Icons.add_a_photo,
+                                      color: Colors.white60,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            //UserName
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              userName,
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                shadows: <Shadow>[
+                                  Shadow(
+                                    color: Colors.black54,
+                                    offset: Offset(2.0, 2.0),
+                                    blurRadius: 3.0,
+                                  )
+                                ],
                               ),
-                            )
+                            ),
+                            //User Age and Location
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  '${userAge.toString()} YEARS OLD',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    shadows: <Shadow>[
+                                      Shadow(
+                                        color: Colors.black54,
+                                        offset: Offset(2.0, 2.0),
+                                        blurRadius: 3.0,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  userLocation,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    shadows: <Shadow>[
+                                      Shadow(
+                                        color: Colors.black54,
+                                        offset: Offset(2.0, 2.0),
+                                        blurRadius: 3.0,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
-                        //UserName
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          userName,
-                          style: TextStyle(
-                            fontSize: 24,
+                      ),
+                      Positioned(
+                        top: 10,
+                        right: 15,
+                        child: Container(
+                          decoration:
+                              BoxDecoration(shape: BoxShape.circle, boxShadow: [
+                            BoxShadow(
+                              color: Color(0xffcdcdcd),
+                              blurRadius: 5.0,
+                            ),
+                          ]),
+                          child: Icon(
+                            Icons.add_a_photo,
                             color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            shadows: <Shadow>[
-                              Shadow(
-                                color: Colors.black54,
-                                offset: Offset(2.0, 2.0),
-                                blurRadius: 3.0,
-                              )
-                            ],
+                            size: 25,
                           ),
                         ),
-                        //User Age and Location
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              '${userAge.toString()} YEARS OLD',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                shadows: <Shadow>[
-                                  Shadow(
-                                    color: Colors.black54,
-                                    offset: Offset(2.0, 2.0),
-                                    blurRadius: 3.0,
-                                  )
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              userLocation,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                shadows: <Shadow>[
-                                  Shadow(
-                                    color: Colors.black54,
-                                    offset: Offset(2.0, 2.0),
-                                    blurRadius: 3.0,
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                      )
+                    ],
                   ),
                   SizedBox(
                     height: 50,
@@ -141,23 +174,62 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Container(
                     width: double.infinity,
                     color: Colors.blue,
-                    height: 500,
+                    height: 560,
                     child: TabBarView(
                       children: [
                         Container(
                           width: double.infinity,
-                          child: Text('Page1'),
-                          color: Colors.blueAccent,
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          child: Wrap(
+                            alignment: WrapAlignment.spaceEvenly,
+                            runSpacing: 15,
+                            children: followingTab(screenWidth),
+                          ),
+                          color: Colors.white,
                         ),
                         Container(
                           width: double.infinity,
-                          child: Text('Page2'),
-                          color: Colors.redAccent,
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          color: Colors.white,
+                          child: Wrap(
+                            alignment: WrapAlignment.spaceEvenly,
+                            runSpacing: 15,
+                            children: followersTab(screenWidth),
+                          ),
                         ),
                         Container(
                           width: double.infinity,
-                          child: Text('Page3'),
-                          color: Colors.grey,
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          color: Colors.white,
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('56 videos'),
+                                  IconButton(
+                                    onPressed: null,
+                                    icon: Icon(
+                                      Icons.search,
+                                      size: 25,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              ListView(
+                                children: [
+                                  Card(
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 50,
+                                      color: Colors.grey,
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
                         )
                       ],
                     ),
@@ -175,8 +247,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: TabBar(
                   indicatorSize: TabBarIndicatorSize.label,
                   indicatorColor: Colors.lightBlue,
-                  // labelColor: Color(0xff99E851),
-                  // unselectedLabelColor: Color(0xffE89980),
                   labelStyle:
                       TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                   unselectedLabelStyle:
@@ -251,5 +321,531 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     );
+  }
+
+  List<Widget> followingTab(double screenWidth) {
+    return [
+      Card(
+        color: Color(0xff092497),
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Container(
+          width: screenWidth / 2.3,
+          height: screenWidth / 2.4,
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 32,
+                child: CircleAvatar(
+                  radius: 30,
+                  backgroundImage: AssetImage("assets/images/profile2.jpg"),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                '$userName',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                userLocation,
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      ),
+      Card(
+        color: Color(0xff092497),
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Container(
+          width: screenWidth / 2.3,
+          height: screenWidth / 2.4,
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 32,
+                child: CircleAvatar(
+                  radius: 30,
+                  backgroundImage: AssetImage("assets/images/profile1.jpg"),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                '$userName',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                userLocation,
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      ),
+      Card(
+        color: Color(0xff092497),
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Container(
+          width: screenWidth / 2.3,
+          height: screenWidth / 2.4,
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 32,
+                child: CircleAvatar(
+                  radius: 30,
+                  backgroundImage: AssetImage("assets/images/profile1.jpg"),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                '$userName',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                userLocation,
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      ),
+      Card(
+        color: Color(0xff092497),
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Container(
+          width: screenWidth / 2.3,
+          height: screenWidth / 2.4,
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 32,
+                child: CircleAvatar(
+                  radius: 30,
+                  backgroundImage: AssetImage("assets/images/profile2.jpg"),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                '$userName',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                userLocation,
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      ),
+      Card(
+        color: Color(0xff092497),
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Container(
+          width: screenWidth / 2.3,
+          height: screenWidth / 2.4,
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 32,
+                child: CircleAvatar(
+                  radius: 30,
+                  backgroundImage: AssetImage("assets/images/profile2.jpg"),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                '$userName',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                userLocation,
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      ),
+      Card(
+        color: Color(0xff092497),
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Container(
+          width: screenWidth / 2.3,
+          height: screenWidth / 2.4,
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 32,
+                child: CircleAvatar(
+                  radius: 30,
+                  backgroundImage: AssetImage("assets/images/profile1.jpg"),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                '$userName',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                userLocation,
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> followersTab(double screenWidth) {
+    return [
+      Card(
+        color: Color(0xff092497),
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Container(
+          width: screenWidth / 2.3,
+          height: screenWidth / 2.4,
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 32,
+                child: CircleAvatar(
+                  radius: 30,
+                  backgroundImage: AssetImage("assets/images/profile1.jpg"),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                'Mr. Cat',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                userLocation,
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      ),
+      Card(
+        color: Color(0xff092497),
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Container(
+          width: screenWidth / 2.3,
+          height: screenWidth / 2.4,
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 32,
+                child: CircleAvatar(
+                  radius: 30,
+                  backgroundImage: AssetImage("assets/images/profile1.jpg"),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                'Mr. Cat',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                userLocation,
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      ),
+      Card(
+        color: Color(0xff092497),
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Container(
+          width: screenWidth / 2.3,
+          height: screenWidth / 2.4,
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 32,
+                child: CircleAvatar(
+                  radius: 30,
+                  backgroundImage: AssetImage("assets/images/profile1.jpg"),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                'Mr. Cat',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                userLocation,
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      ),
+      Card(
+        color: Color(0xff092497),
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Container(
+          width: screenWidth / 2.3,
+          height: screenWidth / 2.4,
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 32,
+                child: CircleAvatar(
+                  radius: 30,
+                  backgroundImage: AssetImage("assets/images/profile1.jpg"),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                'Mr. Cat',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                userLocation,
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      ),
+      Card(
+        color: Color(0xff092497),
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Container(
+          width: screenWidth / 2.3,
+          height: screenWidth / 2.4,
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 32,
+                child: CircleAvatar(
+                  radius: 30,
+                  backgroundImage: AssetImage("assets/images/profile1.jpg"),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                'Mr. Cat',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                userLocation,
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      ),
+      Card(
+        color: Color(0xff092497),
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Container(
+          width: screenWidth / 2.3,
+          height: screenWidth / 2.4,
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 32,
+                child: CircleAvatar(
+                  radius: 30,
+                  backgroundImage: AssetImage("assets/images/profile1.jpg"),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                'Mr. Cat',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                userLocation,
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ];
   }
 }
