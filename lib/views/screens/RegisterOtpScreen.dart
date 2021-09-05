@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
+import 'package:prestar/views/screens/HomeScreen.dart';
 
 class RegisterOtpScreen extends StatefulWidget {
   const RegisterOtpScreen({Key? key}) : super(key: key);
@@ -68,7 +69,14 @@ class _RegisterOtpScreenState extends State<RegisterOtpScreen> {
               SizedBox(
                 height: 55,
                 child: ElevatedButton(
-                  onPressed: null,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => HomeScreen(),
+                      ),
+                    );
+                  },
                   style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all(Color(0xff092497)),
