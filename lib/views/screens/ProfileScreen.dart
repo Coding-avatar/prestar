@@ -4,6 +4,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:prestar/views/screens/videoPost.dart';
 
+import 'HomeScreen.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
@@ -29,7 +31,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           leading: Icon(Icons.menu),
           title: Text('Profile'),
           centerTitle: true,
-          actions: [Icon(Icons.more_vert)],
+          actions: [
+            Icon(Icons.more_vert),
+            SizedBox(
+              width: 15,
+            )
+          ],
         ),
         body: Container(
           width: screenWidth,
@@ -321,6 +328,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
               tooltip: 'Profile',
             ),
           ],
+          onTap: (index) {
+            switch (index) {
+              case 0:
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => HomeScreen(),
+                  ),
+                );
+                break;
+              case 1:
+                // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen(),),);
+                break;
+              case 2:
+                // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen(),),);
+                break;
+              case 3:
+                // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen(),),);
+                break;
+              case 4:
+                break;
+            }
+          },
         ),
       ),
     );
