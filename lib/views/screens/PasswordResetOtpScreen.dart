@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
+import 'ResetPasswordScreen.dart';
+
 class PasswordResetScreen extends StatefulWidget {
   const PasswordResetScreen({Key? key}) : super(key: key);
 
@@ -67,7 +69,11 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
               SizedBox(
                 height: 55,
                 child: ElevatedButton(
-                  onPressed: null,
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ResetPasswordScreen(),
+                    ),
+                  ),
                   style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all(Color(0xff092497)),
