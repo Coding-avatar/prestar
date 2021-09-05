@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prestar/views/screens/PasswordResetOtpScreen.dart';
 
 class RecoverPasswordScreen extends StatefulWidget {
   const RecoverPasswordScreen({Key? key}) : super(key: key);
@@ -73,7 +74,8 @@ class _RecoverPasswordScreenState extends State<RecoverPasswordScreen> {
               SizedBox(
                 height: 55,
                 child: ElevatedButton(
-                  onPressed: null,
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => PasswordResetScreen())),
                   style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all(Color(0xff092497)),
@@ -90,7 +92,7 @@ class _RecoverPasswordScreenState extends State<RecoverPasswordScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Login',
+                          'Send OTP',
                           style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
                         Icon(
