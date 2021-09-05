@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:prestar/views/screens/LoginScreen.dart';
+import 'package:prestar/views/screens/RegisterOtpScreen.dart';
+
+import 'package:prestar/views/screens/HomeScreen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -72,9 +76,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CircleAvatar(
-                  child: Image.asset("assets/logo/prestar.png"),
+                  child: Image.asset(
+                    "assets/logo/prestar_small_logo.png",
+                    width: 70,
+                    height: 70,
+                    color: Colors.white,
+                  ),
                   radius: 50,
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Color(0xff092497),
                 ),
                 SizedBox(
                   height: 20,
@@ -232,7 +241,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(
                   height: 55,
                   child: ElevatedButton(
-                    onPressed: null,
+                    onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => RegisterOtpScreen(),
+                      ),
+                    ),
                     style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(Color(0xff092497)),
@@ -268,9 +281,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Container(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: null,
+                    onPressed: () => Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => LoginScreen(),
+                      ),
+                    ),
                     child: Text(
-                      'Register Now',
+                      'Login',
                       style: TextStyle(fontWeight: FontWeight.w500),
                     ),
                   ),
@@ -278,7 +295,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(
                   height: 55,
                   child: ElevatedButton(
-                    onPressed: null,
+                    onPressed: () => Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => HomeScreen(),
+                      ),
+                    ),
                     style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(Colors.redAccent),
@@ -316,7 +337,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(
                   height: 55,
                   child: ElevatedButton(
-                    onPressed: null,
+                    onPressed: () => Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => HomeScreen(),
+                      ),
+                    ),
                     style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(Colors.blueAccent),
