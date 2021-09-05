@@ -30,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         appBar: AppBar(
           leading: Icon(Icons.menu),
           title: Text('Profile'),
-          centerTitle: true,
+          centerTitle: false,
           actions: [
             Icon(Icons.more_vert),
             SizedBox(
