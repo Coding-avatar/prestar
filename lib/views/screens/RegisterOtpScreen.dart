@@ -1,11 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
-import 'package:prestar/views/screens/HomeScreen.dart';
+// import 'package:prestar/views/screens/HomeScreen.dart';
 
 class RegisterOtpScreen extends StatefulWidget {
-  const RegisterOtpScreen({Key? key}) : super(key: key);
+  final String userMobileNumber;
+  const RegisterOtpScreen({Key? key, required this.userMobileNumber})
+      : super(key: key);
 
   @override
   _RegisterOtpScreenState createState() => _RegisterOtpScreenState();
@@ -13,6 +16,17 @@ class RegisterOtpScreen extends StatefulWidget {
 
 class _RegisterOtpScreenState extends State<RegisterOtpScreen> {
   String userMobileNumber = '71*****892';
+  late String verId;
+  bool codeSent = false;
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      userMobileNumber = widget.userMobileNumber;
+    });
+    verifyPhone();
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -38,7 +52,7 @@ class _RegisterOtpScreenState extends State<RegisterOtpScreen> {
                 height: 20,
               ),
               Text(
-                'Please check your mobile number $userMobileNumber verification OTP',
+                'Please check your mobile number ${userMobileNumber.substring(0, 2) + '*****' + userMobileNumber.substring(7)} verification OTP',
                 style: TextStyle(
                     color: Colors.grey,
                     fontSize: 16,
@@ -50,16 +64,17 @@ class _RegisterOtpScreenState extends State<RegisterOtpScreen> {
               ),
               Container(
                 width: double.infinity,
-                // color: Colors.green,
                 child: OTPTextField(
-                  length: 4,
-                  // width: screenWidth - 250,
-                  fieldWidth: 60,
-                  style: TextStyle(fontSize: 17),
+                  length: 6,
+                  fieldWidth: 40,
+                  style: TextStyle(fontSize: 16),
                   textFieldAlignment: MainAxisAlignment.spaceAround,
                   fieldStyle: FieldStyle.box,
+                  onChanged: (pin) {
+                    // print(pin);
+                  },
                   onCompleted: (pin) {
-                    print("Completed: " + pin);
+                    verifyOTP(pin);
                   },
                 ),
               ),
@@ -70,12 +85,13 @@ class _RegisterOtpScreenState extends State<RegisterOtpScreen> {
                 height: 55,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => HomeScreen(),
-                      ),
-                    );
+                    // verifyOTP(pin);
+                    // Navigator.of(context).pop();
+                    // Navigator.of(context).pushReplacement(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => HomeScreen(),
+                    //   ),
+                    // );
                   },
                   style: ButtonStyle(
                     backgroundColor:
@@ -137,5 +153,45 @@ class _RegisterOtpScreenState extends State<RegisterOtpScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> verifyPhone() async {
+    await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: '+91 $userMobileNumber',
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          print('verification Completed block');
+          await FirebaseAuth.instance.signInWithCredential(credential);
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          print('verification Failed');
+          // handle error here
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          print('Code Sent');
+          setState(() {
+            codeSent = true;
+            verId = verificationId;
+            print('1. Verification id $verId');
+          });
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          print('Code Auto retrival');
+          setState(() {
+            verId = verificationId;
+            print('2. Verification id $verId');
+          });
+        },
+        timeout: Duration(seconds: 60));
+  }
+
+  void verifyOTP(String pin) async {
+    print('Called verify method with pin $pin');
+    PhoneAuthCredential credential =
+        PhoneAuthProvider.credential(verificationId: verId, smsCode: pin);
+    try {
+      User = await FirebaseAuth.instance.signInWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+    }
   }
 }
