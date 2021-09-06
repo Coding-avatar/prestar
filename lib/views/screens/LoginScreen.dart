@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:prestar/views/screens/HomeScreen.dart';
 import 'package:prestar/views/screens/RecoverPasswordScreen.dart';
+import 'package:prestar/views/screens/RegisterOtpScreen.dart';
 import 'package:prestar/views/screens/RegisterScreen.dart';
+import 'package:prestar/views/widgets/errorDialog.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -13,6 +16,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  FirebaseAuth auth = FirebaseAuth.instance;
   TextEditingController mobileNumberFieldController =
       new TextEditingController();
 
@@ -107,11 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               offset: Offset(1, 3)),
                         ]),
                     child: ElevatedButton(
-                      onPressed: () => Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => HomeScreen(),
-                        ),
-                      ),
+                      onPressed: () => signInWithPhoneNumber(),
                       style: ElevatedButton.styleFrom(
                         primary: Colors.transparent,
                         shape: RoundedRectangleBorder(
@@ -268,5 +268,25 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  signInWithPhoneNumber() async {
+    String phoneNumber = mobileNumberFieldController.text;
+    if (phoneNumber.length == 10 &&
+        (phoneNumber.startsWith('6') ||
+            phoneNumber.startsWith('7') ||
+            phoneNumber.startsWith('8') ||
+            phoneNumber.startsWith('9'))) {
+      print('Valid Mobile Number');
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => RegisterOtpScreen(
+                userMobileNumber: phoneNumber,
+              )));
+    } else {
+      print('Invalid phone number');
+      setState(() {
+        _isPhoneNumberValid = false;
+      });
+    }
   }
 }
