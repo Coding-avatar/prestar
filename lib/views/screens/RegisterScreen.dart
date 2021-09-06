@@ -243,7 +243,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: ElevatedButton(
                     onPressed: () => Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => RegisterOtpScreen(),
+                        builder: (context) => RegisterOtpScreen(
+                          userMobileNumber: '1234567890',
+                        ),
                       ),
                     ),
                     style: ButtonStyle(
