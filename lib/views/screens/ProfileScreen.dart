@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:prestar/views/screens/videoPost.dart';
+import 'package:prestar/views/widgets/videoPost.dart';
 
 import 'HomeScreen.dart';
 
