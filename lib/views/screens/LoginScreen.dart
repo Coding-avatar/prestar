@@ -25,12 +25,20 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isPhoneNumberValid = true;
   String errorText = "Please Enter a valid phone number";
 
+  @override
   void initState() {
     super.initState();
     Future.delayed(
       Duration(),
       () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
     );
+  }
+
+  @override
+  void dispose() { 
+    super.dispose();
+    mobileNumberFieldController.dispose();
+    mobileNumberFocusNode.dispose();
   }
 
   @override
