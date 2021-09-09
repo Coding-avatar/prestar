@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mdnifesalilislam.prestar.prestar">
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
    <application
         android:label="Prestar"
         android:icon="@mipmap/ic_launcher">
