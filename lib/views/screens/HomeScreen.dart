@@ -6,6 +6,10 @@ import 'package:prestar/views/screens/ProfileScreen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:video_player/video_player.dart';
 
+import 'GoLiveDescriptionScreen.dart';
+import 'PostScreen.dart';
+import 'VideoPostScreen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -351,13 +355,25 @@ class _HomeScreenState extends State<HomeScreen> {
             case 0:
               break;
             case 1:
-              // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen(),),);
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => CreatePostScreen(),
+                ),
+              );
               break;
             case 2:
-              // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen(),),);
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => GoLiveDescriptionScreen(),
+                ),
+              );
               break;
             case 3:
-              // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen(),),);
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => VideoPostScreen(),
+                ),
+              );
               break;
             case 4:
               Navigator.of(context).pushReplacement(
