@@ -111,7 +111,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               offset: Offset(1, 3)),
                         ]),
                     child: ElevatedButton(
-                      onPressed: () => signInWithPhoneNumber(),
+                      onPressed: () => Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => HomeScreen(),
+                        ),
+                      ),
+                      // onPressed: () => signInWithPhoneNumber(),
                       style: ElevatedButton.styleFrom(
                         primary: Colors.transparent,
                         shape: RoundedRectangleBorder(
