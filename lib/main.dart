@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.indigo,
-        scaffoldBackgroundColor: Colors.white,
+        scaffoldBackgroundColor: Color(0xfff1eeee),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         brightness: Brightness.light,
         fontFamily: 'Roboto',
@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Roboto',
             fontStyle: FontStyle.italic,
             color: Colors.black87,
-            fontWeight: FontWeight.w200,
+            fontWeight: FontWeight.w400,
             fontSize: 14,
           ),
           overline: TextStyle(
@@ -59,8 +59,8 @@ class MyApp extends StatelessWidget {
           subtitle1: TextStyle(
             fontFamily: 'Roboto',
             color: Colors.black54,
-            fontWeight: FontWeight.w400,
-            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            fontSize: 18,
           ),
           subtitle2: TextStyle(
             fontFamily: 'Roboto',
