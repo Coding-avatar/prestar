@@ -18,6 +18,31 @@ class _VideoPostScreenState extends State<VideoPostScreen> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xfff1eeee),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Image.asset(
+            "assets/logo/prestarold.png",
+            height: 40,
+            width: screenWidth / 3,
+          ),
+        ),
+        leadingWidth: 130,
+        centerTitle: true,
+        // actions: [
+        //   IconButton(
+        //     onPressed: null,
+        //     icon: ImageIcon(
+        //       AssetImage("assets/icons/bell.png"),
+        //       color: Colors.black87,
+        //     ),
+        //   ),
+        //   SizedBox(
+        //     width: 15,
+        //   )
+        // ],
+      ),
       body: Container(
         width: screenWidth,
         height: screenHeight,
