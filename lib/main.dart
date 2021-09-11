@@ -48,7 +48,7 @@ class _RedirectUserState extends State<RedirectUser> {
         print('User is signed in!');
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => HomeScreen(),
+            builder: (context) => LoginScreen(),
           ),
         );
       }

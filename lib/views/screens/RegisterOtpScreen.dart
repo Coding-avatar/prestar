@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -189,7 +190,7 @@ class _RegisterOtpScreenState extends State<RegisterOtpScreen> {
     PhoneAuthCredential credential =
         PhoneAuthProvider.credential(verificationId: verId, smsCode: pin);
     try {
-      User = await FirebaseAuth.instance.signInWithCredential(credential);
+      var user = await FirebaseAuth.instance.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {
       print(e.message);
     }

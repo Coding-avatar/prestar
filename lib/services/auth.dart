@@ -36,7 +36,7 @@ class Auth implements AuthBase {
     await _preferences.setString('uid', uid);
   }
 
-  MyUser _userFromFirebase(User user) {
+  MyUser? _userFromFirebase(User? user) {
     if (user == null) {
       return null;
     }

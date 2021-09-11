@@ -1,5 +1,14 @@
+import 'package:better_player/better_player.dart';
+import 'package:chewie/chewie.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prestar/views/screens/ProfileScreen.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:video_player/video_player.dart';
+
+import 'GoLiveDescriptionScreen.dart';
+import 'PostScreen.dart';
+import 'VideoPostScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -9,21 +18,92 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List bannerImages = [
+    'https://images.pexels.com/photos/9247345/pexels-photo-9247345.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+    'https://images.pexels.com/photos/9245166/pexels-photo-9245166.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+    'https://images.pexels.com/photos/9245170/pexels-photo-9245170.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+    'https://images.pexels.com/photos/9226518/pexels-photo-9226518.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+    'https://images.pexels.com/photos/9443587/pexels-photo-9443587.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+    'https://images.pexels.com/photos/9351592/pexels-photo-9351592.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+    'https://images.pexels.com/photos/9329355/pexels-photo-9329355.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+    'https://images.pexels.com/photos/9321606/pexels-photo-9321606.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+    'https://images.pexels.com/photos/7365263/pexels-photo-7365263.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+    'https://images.pexels.com/photos/9320447/pexels-photo-9320447.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+    'https://images.pexels.com/photos/9297975/pexels-photo-9297975.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+    'https://images.pexels.com/photos/9303791/pexels-photo-9303791.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+    'https://images.pexels.com/photos/9250013/pexels-photo-9250013.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+    'https://images.pexels.com/photos/9266627/pexels-photo-9266627.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+    'https://images.pexels.com/photos/9229072/pexels-photo-9229072.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+  ];
+
+  List bannerVideos = [
+    {
+      'thumbnail':
+          'https://images.pexels.com/videos/1526909/pictures/preview-0.jpg',
+      'video':
+          "https://player.vimeo.com/external/296210754.sd.mp4?s=9db41d71fa61a2cc19757f656fc5c5c5ef9f69ec&profile_id=164&oauth2_token_id=57447761"
+    },
+    {
+      'thumbnail':
+          'https://images.pexels.com/videos/1510090/pictures/preview-0.jpg',
+      'video':
+          "https://player.vimeo.com/external/295482071.sd.mp4?s=238ca35e1e9ae91fd08ce5e290c1f168c7f1fe1b&profile_id=164&oauth2_token_id=57447761"
+    },
+    {
+      'thumbnail':
+          "https://images.pexels.com/videos/1494284/pictures/preview-0.jpg",
+      'video':
+          "https://player.vimeo.com/external/294394804.sd.mp4?s=0ae63fad00aa2702fd154632d9ed93fb7d7ee543&profile_id=164&oauth2_token_id=57447761"
+    },
+    {
+      'thumbnail':
+          "https://images.pexels.com/videos/856973/pictures/preview-0.jpg",
+      'video':
+          "https://player.vimeo.com/external/226685105.sd.mp4?s=90e56fbbb50fbc68a850f8db3f051c7465bfef71&profile_id=164&oauth2_token_id=57447761"
+    },
+    {
+      'thumbnail':
+          "https://images.pexels.com/videos/856065/pictures/preview-0.jpg",
+      'video':
+          "https://player.vimeo.com/external/214503838.sd.mp4?s=0aac7d3caa1d5eedbd97234814b1ca37904b71b2&profile_id=164&oauth2_token_id=57447761"
+    },
+  ];
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: Color(0xfff1eeee),
       appBar: AppBar(
-        leading: Icon(Icons.menu),
-        title: Image.asset(
-          "assets/logo/prestar.png",
-          height: 70,
-          width: screenWidth / 3,
+        backgroundColor: Color(0xfff1eeee),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Image.asset(
+            "assets/logo/prestarold.png",
+            height: 40,
+            width: screenWidth / 3,
+          ),
         ),
+        leadingWidth: 130,
         centerTitle: true,
         actions: [
-          Icon(Icons.device_unknown),
+          IconButton(
+            onPressed: null,
+            icon: ImageIcon(
+              AssetImage("assets/icons/bell.png"),
+              color: Colors.black87,
+            ),
+          ),
           SizedBox(
             width: 15,
           )
@@ -37,19 +117,190 @@ class _HomeScreenState extends State<HomeScreen> {
             physics: AlwaysScrollableScrollPhysics(),
             child: Column(
               children: [
+                // Container(
+                //   height: 55,
+                //   decoration: BoxDecoration(
+                //     gradient: LinearGradient(
+                //         colors: [Color(0xff153c8d), Color(0xff0d2454)],
+                //         begin: Alignment.topCenter,
+                //         end: Alignment.bottomCenter),
+                //   ),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Padding(
+                //         padding: const EdgeInsets.only(left: 10),
+                //         child: Image.asset(
+                //           "assets/logo/prestarold.png",
+                //           height: 70,
+                //           color: Colors.white,
+                //           width: screenWidth / 3,
+                //         ),
+                //       ),
+                //       IconButton(
+                //         onPressed: null,
+                //         icon: ImageIcon(
+                //           AssetImage("assets/icons/bell.png"),
+                //           color: Colors.white,
+                //         ),
+                //       )
+                //     ],
+                //   ),
+                // ),
                 Padding(
-                  padding: const EdgeInsets.all(15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                   child: Row(
                     children: [
-                      Icon(
-                        Icons.search,
-                        color: Color(0xff092497),
-                        size: 30,
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Icon(
+                          Icons.search,
+                          color: Color(0xff092497),
+                          size: 25,
+                        ),
                       ),
-                      Expanded(child: TextField())
+                      Expanded(
+                        child: Material(
+                          elevation: 15,
+                          shadowColor: Colors.black,
+                          borderRadius: BorderRadius.circular(25),
+                          child: TextField(
+                            decoration: new InputDecoration(
+                              border: new OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25),
+                                // borderSide: new BorderSide(color: Colors.teal),
+                              ),
+                              enabledBorder: new OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25),
+                                borderSide: new BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                              isDense: true,
+                              hintText: 'Search',
+                              hintStyle:
+                                  TextStyle(color: Colors.grey, fontSize: 14),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 25, vertical: 10),
+                              filled: true,
+                              fillColor: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                )
+                ),
+                CarouselSlider.builder(
+                  itemCount: bannerImages.length,
+                  itemBuilder: (BuildContext context, int itemIndex,
+                          int pageViewIndex) =>
+                      Container(
+                    child: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.fromLTRB(15, 5, 15, 20),
+                      child: Material(
+                        elevation: 10,
+                        shadowColor: Colors.black,
+                        borderRadius: BorderRadius.circular(25),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(25),
+                          child: Image.network(
+                            bannerImages[itemIndex],
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  options: CarouselOptions(
+                    viewportFraction: 1,
+                    height: 160,
+                    initialPage: 0,
+                    enableInfiniteScroll: true,
+                    reverse: false,
+                    autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 3),
+                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    // enlargeCenterPage: true,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.only(
+                    right: 10,
+                    left: 10,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Recent Live Videos',
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black87,
+                            fontWeight: FontWeight.w800),
+                      ),
+                      Text(
+                        'View All',
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.blue,
+                            fontWeight: FontWeight.w800),
+                      ),
+                    ],
+                  ),
+                ),
+                CarouselSlider.builder(
+                  itemCount: bannerVideos.length,
+                  itemBuilder: (BuildContext context, int itemIndex,
+                          int pageViewIndex) =>
+                      Container(
+                    child: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
+                      child: Material(
+                        elevation: 10,
+                        shadowColor: Colors.black,
+                        borderRadius: BorderRadius.circular(25),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(25),
+                          child: AspectRatio(
+                            aspectRatio: 16 / 9,
+                            child: BetterPlayer.network(
+                              bannerVideos[itemIndex]['video'],
+                              betterPlayerConfiguration:
+                                  BetterPlayerConfiguration(
+                                placeholder: Image.network(
+                                    bannerVideos[itemIndex]['thumbnail']),
+                                autoPlay: false,
+                                controlsConfiguration:
+                                    BetterPlayerControlsConfiguration(
+                                        enableMute: true),
+                                aspectRatio: 16 / 9,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  options: CarouselOptions(
+                    viewportFraction: 1,
+                    initialPage: 0,
+                    enableInfiniteScroll: true,
+                    reverse: false,
+                    autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 5),
+                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    // enlargeCenterPage: true,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                ),
               ],
             ),
           ),
@@ -72,24 +323,24 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BottomNavigationBarItem(
             icon: ImageIcon(
+              AssetImage("assets/icons/post.png"),
+            ),
+            label: 'Post',
+            tooltip: 'Post  ',
+          ),
+          BottomNavigationBarItem(
+            icon: ImageIcon(
               AssetImage("assets/icons/video-camera.png"),
             ),
-            label: 'Videos',
-            tooltip: 'Videos',
+            label: 'Go Live',
+            tooltip: 'Go Live',
           ),
           BottomNavigationBarItem(
             icon: ImageIcon(
               AssetImage("assets/icons/video.png"),
             ),
-            label: 'Video',
-            tooltip: 'Video',
-          ),
-          BottomNavigationBarItem(
-            icon: ImageIcon(
-              AssetImage("assets/icons/bell.png"),
-            ),
-            label: 'Notification',
-            tooltip: 'Notifications',
+            label: 'Videos',
+            tooltip: 'Videos',
           ),
           BottomNavigationBarItem(
             icon: ImageIcon(
@@ -104,13 +355,25 @@ class _HomeScreenState extends State<HomeScreen> {
             case 0:
               break;
             case 1:
-              // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen(),),);
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => CreatePostScreen(),
+                ),
+              );
               break;
             case 2:
-              // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen(),),);
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => GoLiveDescriptionScreen(),
+                ),
+              );
               break;
             case 3:
-              // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen(),),);
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => VideoPostScreen(),
+                ),
+              );
               break;
             case 4:
               Navigator.of(context).pushReplacement(

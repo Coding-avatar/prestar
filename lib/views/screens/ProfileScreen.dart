@@ -4,7 +4,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:prestar/views/widgets/videoPost.dart';
 
+import 'GoLiveDescriptionScreen.dart';
 import 'HomeScreen.dart';
+import 'PostScreen.dart';
+import 'VideoPostScreen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -17,7 +20,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String userName = "Rima Dutta", userLocation = "Kolkata";
   int userAge = 27;
 
-  String userFollowing = "231", userFollowers = '1.3k', userVideos = '56';
+  String userFollowing = "231",
+      userFollowers = '1.3k',
+      userVideos = '56',
+      userPosts = '151';
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +31,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final double screenHeight = MediaQuery.of(context).size.height;
     return DefaultTabController(
       initialIndex: 1,
-      length: 3,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           leading: Icon(Icons.menu),
@@ -43,245 +49,375 @@ class _ProfileScreenState extends State<ProfileScreen> {
           height: screenHeight,
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
-            child: Stack(children: [
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Stack(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        height: screenHeight / 3,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage("assets/images/cover2.jpg"),
-                              fit: BoxFit.cover),
-                        ),
-                        alignment: Alignment.center,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 40,
-                            ),
-                            Stack(
-                              children: [
-                                CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage("assets/images/profile2.jpg"),
-                                  radius: 55,
-                                ),
-                                PositionedDirectional(
-                                  bottom: 10,
-                                  end: 15,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Color(0xffcdcdcd),
-                                            blurRadius: 5.0,
-                                          ),
-                                        ]),
-                                    child: Icon(
-                                      Icons.add_a_photo,
-                                      color: Colors.white60,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                            //UserName
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              userName,
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                shadows: <Shadow>[
-                                  Shadow(
-                                    color: Colors.black54,
-                                    offset: Offset(2.0, 2.0),
-                                    blurRadius: 3.0,
-                                  )
-                                ],
-                              ),
-                            ),
-                            //User Age and Location
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  '${userAge.toString()} YEARS OLD',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    shadows: <Shadow>[
-                                      Shadow(
-                                        color: Colors.black54,
-                                        offset: Offset(2.0, 2.0),
-                                        blurRadius: 3.0,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  userLocation,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    shadows: <Shadow>[
-                                      Shadow(
-                                        color: Colors.black54,
-                                        offset: Offset(2.0, 2.0),
-                                        blurRadius: 3.0,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: screenHeight / 3,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage("assets/images/cover2.jpg"),
+                            fit: BoxFit.cover),
                       ),
-                      Positioned(
-                        top: 10,
-                        right: 15,
-                        child: Container(
-                          decoration:
-                              BoxDecoration(shape: BoxShape.circle, boxShadow: [
-                            BoxShadow(
-                              color: Color(0xffcdcdcd),
-                              blurRadius: 5.0,
-                            ),
-                          ]),
-                          child: Icon(
-                            Icons.add_a_photo,
-                            color: Colors.white,
-                            size: 25,
+                      alignment: Alignment.center,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 20,
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 50,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    color: Colors.blue,
-                    height: 560,
-                    child: TabBarView(
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          child: Wrap(
-                            alignment: WrapAlignment.spaceEvenly,
-                            runSpacing: 15,
-                            children: followingTab(screenWidth),
-                          ),
-                          color: Colors.white,
-                        ),
-                        Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          color: Colors.white,
-                          child: Wrap(
-                            alignment: WrapAlignment.spaceEvenly,
-                            runSpacing: 15,
-                            children: followersTab(screenWidth),
-                          ),
-                        ),
-                        Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          color: Colors.white,
-                          child: Column(
+                          Stack(
                             children: [
-                              Divider(),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '56 Videos',
-                                    style: TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w500,
-                                        color: Color(0xff092497)),
-                                  ),
-                                  IconButton(
-                                    onPressed: null,
-                                    icon: Icon(Icons.search,
-                                        size: 30, color: Color(0xff092497)),
-                                  ),
-                                ],
+                              CircleAvatar(
+                                backgroundImage:
+                                    AssetImage("assets/images/profile2.jpg"),
+                                radius: 55,
                               ),
-                              Expanded(
-                                child: ListView(
-                                  children: [
-                                    VideoPost(),
-                                  ],
+                              PositionedDirectional(
+                                bottom: 10,
+                                end: 15,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Color(0xffcdcdcd),
+                                          blurRadius: 5.0,
+                                        ),
+                                      ]),
+                                  child: Icon(
+                                    Icons.add_a_photo,
+                                    color: Colors.white60,
+                                  ),
                                 ),
                               )
                             ],
                           ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(20, 230, 20, 0),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Color(0xff092497),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
-                child: TabBar(
-                  indicatorSize: TabBarIndicatorSize.label,
-                  indicatorColor: Colors.lightBlue,
-                  labelStyle:
-                      TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-                  unselectedLabelStyle:
-                      TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                  indicatorWeight: 2,
-                  tabs: [
-                    Tab(
-                      child: Column(
-                        children: [Text(userFollowing), Text('Following')],
+                          //UserName
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                userName,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  shadows: <Shadow>[
+                                    Shadow(
+                                      color: Colors.black54,
+                                      offset: Offset(2.0, 2.0),
+                                      blurRadius: 3.0,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Icon(
+                                Icons.share,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ],
+                          ),
+                          //User Age and Location
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                '${userAge.toString()} YEARS OLD',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  shadows: <Shadow>[
+                                    Shadow(
+                                      color: Colors.black54,
+                                      offset: Offset(2.0, 2.0),
+                                      blurRadius: 3.0,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                userLocation,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  shadows: <Shadow>[
+                                    Shadow(
+                                      color: Colors.black54,
+                                      offset: Offset(2.0, 2.0),
+                                      blurRadius: 3.0,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              shadows: <Shadow>[
+                                Shadow(
+                                  color: Colors.black54,
+                                  offset: Offset(2.0, 2.0),
+                                  blurRadius: 3.0,
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              InkWell(
+                                child: Container(
+                                  width: screenWidth / 4,
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                        colors: [
+                                          Colors.white,
+                                          Color(0xffd5dfee)
+                                        ],
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter),
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: Border.all(
+                                        color: Colors.black87, width: 1),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.black87,
+                                          blurRadius: 10),
+                                    ],
+                                  ),
+                                  child: Text('Edit Profile'),
+                                ),
+                              ),
+                              InkWell(
+                                child: Container(
+                                  width: screenWidth / 4,
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                        colors: [
+                                          Colors.white,
+                                          Color(0xffd5dfee)
+                                        ],
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter),
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: Border.all(
+                                        color: Colors.black87, width: 1),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.black87,
+                                          blurRadius: 10),
+                                    ],
+                                  ),
+                                  child: Text('Settings'),
+                                ),
+                              ),
+                              InkWell(
+                                child: Container(
+                                  width: screenWidth / 4,
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                        colors: [
+                                          Colors.white,
+                                          Color(0xffd5dfee)
+                                        ],
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter),
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: Border.all(
+                                        color: Colors.black87, width: 1),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.black87,
+                                          blurRadius: 10),
+                                    ],
+                                  ),
+                                  child: Text('Log out'),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
                       ),
                     ),
-                    Tab(
-                      child: Column(
-                        children: [Text(userFollowers), Text('Followers')],
+                    Positioned(
+                      top: 10,
+                      right: 15,
+                      child: Container(
+                        decoration:
+                            BoxDecoration(shape: BoxShape.circle, boxShadow: [
+                          BoxShadow(
+                            color: Color(0xffcdcdcd),
+                            blurRadius: 5.0,
+                          ),
+                        ]),
+                        child: Icon(
+                          Icons.add_a_photo,
+                          color: Colors.white,
+                          size: 25,
+                        ),
                       ),
-                    ),
-                    Tab(
-                      child: Column(
-                        children: [Text(userVideos), Text('Videos')],
-                      ),
-                    ),
+                    )
                   ],
                 ),
-              ),
-            ]),
+                // SizedBox(
+                //   height: 50,
+                // ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [Color(0xff153a88), Color(0xff0d2556)],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter),
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black54,
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
+                        )
+                      ]),
+                  padding: EdgeInsets.fromLTRB(5, 20, 5, 10),
+                  child: TabBar(
+                    indicatorSize: TabBarIndicatorSize.label,
+                    indicatorColor: Colors.lightBlue,
+                    labelStyle:
+                        TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                    unselectedLabelStyle:
+                        TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                    indicatorWeight: 2,
+                    tabs: [
+                      Tab(
+                        child: Column(
+                          children: [
+                            Text(userFollowing),
+                            Text(
+                              'Following',
+                              softWrap: false,
+                            )
+                          ],
+                        ),
+                      ),
+                      Tab(
+                        child: Column(
+                          children: [Text(userFollowers), Text('Followers')],
+                        ),
+                      ),
+                      Tab(
+                        child: Column(
+                          children: [Text(userVideos), Text('Videos')],
+                        ),
+                      ),
+                      Tab(
+                        child: Column(
+                          children: [Text(userPosts), Text('Posts')],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 560,
+                  child: TabBarView(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        margin: EdgeInsets.symmetric(vertical: 15),
+                        child: Wrap(
+                          alignment: WrapAlignment.spaceEvenly,
+                          runSpacing: 15,
+                          children: followingTab(screenWidth),
+                        ),
+                        color: Colors.white,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        margin: EdgeInsets.symmetric(vertical: 15),
+                        color: Colors.white,
+                        child: Wrap(
+                          alignment: WrapAlignment.spaceEvenly,
+                          runSpacing: 15,
+                          children: followersTab(screenWidth),
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        margin: EdgeInsets.symmetric(vertical: 15),
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            Divider(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '56 Videos',
+                                  style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xff092497)),
+                                ),
+                                IconButton(
+                                  onPressed: null,
+                                  icon: Icon(Icons.search,
+                                      size: 30, color: Color(0xff092497)),
+                                ),
+                              ],
+                            ),
+                            Expanded(
+                              child: ListView(
+                                children: [
+                                  VideoPost(),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 15),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -301,24 +437,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             BottomNavigationBarItem(
               icon: ImageIcon(
+                AssetImage("assets/icons/post.png"),
+              ),
+              label: 'Post',
+              tooltip: 'Post  ',
+            ),
+            BottomNavigationBarItem(
+              icon: ImageIcon(
                 AssetImage("assets/icons/video-camera.png"),
               ),
-              label: 'Videos',
-              tooltip: 'Videos',
+              label: 'Go Live',
+              tooltip: 'Go Live',
             ),
             BottomNavigationBarItem(
               icon: ImageIcon(
                 AssetImage("assets/icons/video.png"),
               ),
-              label: 'Video',
-              tooltip: 'Video',
-            ),
-            BottomNavigationBarItem(
-              icon: ImageIcon(
-                AssetImage("assets/icons/bell.png"),
-              ),
-              label: 'Notification',
-              tooltip: 'Notifications',
+              label: 'Videos',
+              tooltip: 'Videos',
             ),
             BottomNavigationBarItem(
               icon: ImageIcon(
@@ -338,13 +474,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 );
                 break;
               case 1:
-                // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen(),),);
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => CreatePostScreen(),
+                  ),
+                );
                 break;
               case 2:
-                // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen(),),);
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => GoLiveDescriptionScreen(),
+                  ),
+                );
                 break;
               case 3:
-                // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen(),),);
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => VideoPostScreen(),
+                  ),
+                );
                 break;
               case 4:
                 break;
