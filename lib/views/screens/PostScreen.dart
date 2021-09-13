@@ -53,7 +53,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               padding: const EdgeInsets.all(10),
               child: Row(
                 children: [
-                  CircleAvatar(),
+                  CircleAvatar(
+                    backgroundImage: AssetImage("assets/images/profile2.jpg"),
+                  ),
                   SizedBox(
                     width: 10,
                   ),
@@ -76,14 +78,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               Container(
                 width: double.infinity,
                 height: screenHeight / 3.5,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/images/uploadPhoto.png"),
-                      fit: BoxFit.fitHeight),
+                child: Image.asset(
+                  "assets/images/uploadPhoto.png",
+                  fit: BoxFit.contain,
                 ),
               )
             else
-              Image.file(this._imageFile!),
+              Container(
+                width: double.infinity,
+                height: screenHeight / 3.5,
+                child: Image.file(
+                  this._imageFile!,
+                  fit: BoxFit.contain,
+                ),
+              ),
             Container(
               width: double.infinity,
               height: screenHeight / 3.5,
@@ -94,6 +102,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   hintText: 'What\'s on your mind?',
                   hintStyle: TextStyle(color: Colors.black12, fontSize: 24),
                 ),
+                maxLines: 4,
+                style: TextStyle(color: Colors.black54, fontSize: 24),
               ),
             ),
             Container(
@@ -193,15 +203,17 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 
   Future<void> _pickImageFromGallery() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() => this._imageFile = File(pickedFile.path));
+    var status = await Permission.camera.status;
+    if (await Permission.camera.request().isGranted) {
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        setState(() => this._imageFile = File(pickedFile.path));
+      }
     }
   }
 
   Future<void> _pickImageFromCamera() async {
     var status = await Permission.camera.status;
-    print(status.isDenied);
     if (await Permission.camera.request().isGranted) {
       final pickedFile = await _picker.pickImage(source: ImageSource.camera);
       if (pickedFile != null) {
