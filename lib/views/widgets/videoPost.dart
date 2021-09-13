@@ -1,13 +1,18 @@
+import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+import 'package:prestar/views/screens/CommentsScreen.dart';
+import 'package:prestar/views/screens/LikesScreen.dart';
 
 class VideoPost extends StatefulWidget {
   final String userName;
   final String lastActiveTime;
   final String numberOfViews;
+  final String numberOfLikes;
+  final String numberOfComments;
   final String videoTitle;
   final String videoDescription;
   final String videoUrl;
+  final String videoThumbnail;
 
   const VideoPost({
     this.numberOfViews = "1.8k",
@@ -17,30 +22,39 @@ class VideoPost extends StatefulWidget {
     this.videoDescription =
         "Ln publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available.",
     this.videoUrl = "https://brixhamtechnology.com/Content/media/video.mp4",
+    this.videoThumbnail =
+        "https://images.pexels.com/photos/9321606/pexels-photo-9321606.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+    this.numberOfLikes = "0",
+    this.numberOfComments = "0",
   });
 
   @override
   _VideoPostState createState() => _VideoPostState();
 }
 
+enum Options {
+  none,
+  copy,
+  unfollow,
+  report,
+}
+
 class _VideoPostState extends State<VideoPost> {
   //Need a stream for like, comment, share
-  late VideoPlayerController _controller;
+  bool _isLiked = false;
+  bool _isShared = false;
+  var _selection = Options.none;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(widget.videoUrl)
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
-      });
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
       child: Column(
         children: [
           Row(
@@ -61,28 +75,58 @@ class _VideoPostState extends State<VideoPost> {
                 '${widget.numberOfViews} ',
                 style: TextStyle(color: Colors.black54, fontSize: 16),
               ),
-              Icon(Icons.more_horiz),
+              PopupMenuButton<Options>(
+                padding: EdgeInsets.all(0),
+                iconSize: 20,
+                onSelected: (Options result) {
+                  setState(() {
+                    _selection = result;
+                  });
+                },
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuEntry<Options>>[
+                  const PopupMenuItem<Options>(
+                    value: Options.copy,
+                    child: Text('Copy Post'),
+                  ),
+                  const PopupMenuItem<Options>(
+                    value: Options.unfollow,
+                    child: Text('Unfollow'),
+                  ),
+                  const PopupMenuItem<Options>(
+                    value: Options.report,
+                    child: Text('Report Problem'),
+                  ),
+                ],
+              )
             ],
           ),
           SizedBox(
             height: 5,
           ),
           Container(
-            child: _controller.value.isInitialized
-                ? GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _controller.value.isPlaying
-                            ? _controller.pause()
-                            : _controller.play();
-                      });
-                    },
-                    child: AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: VideoPlayer(_controller),
+            width: double.infinity,
+            child: Material(
+              elevation: 10,
+              shadowColor: Colors.black,
+              borderRadius: BorderRadius.circular(25),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(25),
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: BetterPlayer.network(
+                    widget.videoUrl,
+                    betterPlayerConfiguration: BetterPlayerConfiguration(
+                      placeholder: Image.network(widget.videoThumbnail),
+                      autoPlay: false,
+                      controlsConfiguration:
+                          BetterPlayerControlsConfiguration(enableMute: true),
+                      aspectRatio: 16 / 9,
                     ),
-                  )
-                : Container(),
+                  ),
+                ),
+              ),
+            ),
           ),
           SizedBox(
             height: 5,
@@ -105,6 +149,81 @@ class _VideoPostState extends State<VideoPost> {
                 fontWeight: FontWeight.w300),
           ),
           Divider(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      setState(() {
+                        _isLiked = !_isLiked;
+                      });
+                    },
+                    icon: Icon(
+                      Icons.thumb_up,
+                      color: _isLiked ? Colors.indigo : Colors.grey,
+                      size: 20,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(widget.numberOfLikes),
+                  InkWell(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => LikesScreen(),
+                      ),
+                    ),
+                    child: Text(
+                      ' Like',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              InkWell(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CommentsScreen(),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.comment_bank_outlined,
+                      color: Colors.indigo,
+                    ),
+                    Text(widget.numberOfComments),
+                    Text(' Comment')
+                  ],
+                ),
+              ),
+              Row(
+                children: [
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      setState(() {
+                        _isShared = !_isShared;
+                      });
+                    },
+                    icon: Icon(
+                      Icons.share,
+                      color: Colors.indigo,
+                    ),
+                  ),
+                  Text(widget.numberOfLikes),
+                  Text(' Share')
+                ],
+              ),
+            ],
+          )
         ],
       ),
     );
