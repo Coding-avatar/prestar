@@ -33,10 +33,9 @@ dependencies:
   video_player: ^2.1.15
   chewie: ^1.2.2
   better_player: ^0.0.73
-  sms_autofill: ^2.0.1
-  flutter_login_facebook: ^1.1.0
   carousel_slider: ^4.0.0
-
+  image_picker: ^0.8.4
+  permission_handler: ^8.1.6
 
 
 
