@@ -46,7 +46,14 @@ class _CommentsScreenState extends State<CommentsScreen> {
               children: [
                 Text('hello friends'),
                 Row(
-                  children: [TextButton(onPressed: null, child: Text('Reply'))],
+                  children: [
+                    TextButton(
+                      onPressed: null,
+                      child: Text('Reply'),
+                      style: ButtonStyle(
+                          padding: MaterialStateProperty.all(EdgeInsets.zero)),
+                    )
+                  ],
                 )
               ],
             ),
