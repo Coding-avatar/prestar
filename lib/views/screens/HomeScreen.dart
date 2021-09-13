@@ -2,8 +2,10 @@ import 'package:better_player/better_player.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prestar/models/imagePostInfo.dart';
 import 'package:prestar/views/screens/ProfileScreen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:prestar/views/widgets/imagePost.dart';
 import 'package:video_player/video_player.dart';
 
 import 'GoLiveDescriptionScreen.dart';
@@ -18,6 +20,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<ImagePostInfo> _postData = List.empty(growable: true);
   List bannerImages = [
     'https://images.pexels.com/photos/9247345/pexels-photo-9247345.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
     'https://images.pexels.com/photos/9245166/pexels-photo-9245166.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
@@ -71,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    fillData();
   }
 
   @override
@@ -301,6 +305,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     scrollDirection: Axis.horizontal,
                   ),
                 ),
+                ListView.builder(
+                  itemCount: _postData.length,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return ImagePost(imageUrl: _postData[index].imageUrl);
+                  },
+                )
               ],
             ),
           ),
@@ -386,5 +398,19 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
     );
+  }
+
+  void fillData() {
+    setState(() {
+      _postData.add(ImagePostInfo(
+        imageUrl:
+            'https://images.pexels.com/videos/856065/pictures/preview-0.jpg',
+        imageTitle: 'Image 1',
+      ));
+      _postData.add(ImagePostInfo(
+        imageUrl:
+            'https://images.pexels.com/videos/856065/pictures/preview-0.jpg',
+      ));
+    });
   }
 }
