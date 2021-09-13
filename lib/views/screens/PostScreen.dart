@@ -1,11 +1,13 @@
+import 'dart:io';
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:prestar/models/imagePostInfo.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:prestar/views/screens/GoLiveDescriptionScreen.dart';
 import 'package:prestar/views/screens/HomeScreen.dart';
 import 'package:prestar/views/screens/VideoPostScreen.dart';
-import 'package:prestar/views/widgets/imagePost.dart';
+import 'package:image_picker/image_picker.dart';
 
-import 'ProfileScreen.dart';
+import 'package:prestar/views/screens/ProfileScreen.dart';
 
 class CreatePostScreen extends StatefulWidget {
   const CreatePostScreen({Key? key}) : super(key: key);
@@ -15,11 +17,12 @@ class CreatePostScreen extends StatefulWidget {
 }
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
-  List<ImagePostInfo> _postData = List.empty(growable: true);
+  String userName = "Rima Dutta";
+  File? _imageFile;
+  final _picker = ImagePicker();
   @override
   void initState() {
     super.initState();
-    fillData();
   }
 
   @override
@@ -27,6 +30,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Color(0xfff1eeee),
         leading: Padding(
@@ -39,27 +43,71 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         ),
         leadingWidth: 130,
         centerTitle: true,
-        // actions: [
-        //   IconButton(
-        //     onPressed: null,
-        //     icon: ImageIcon(
-        //       AssetImage("assets/icons/bell.png"),
-        //       color: Colors.black87,
-        //     ),
-        //   ),
-        //   SizedBox(
-        //     width: 15,
-        //   )
-        // ],
       ),
       body: Container(
         width: screenWidth,
         height: screenHeight,
-        child: ListView.builder(
-          itemCount: _postData.length,
-          itemBuilder: (context, index) {
-            return ImagePost(imageUrl: _postData[index].imageUrl);
-          },
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  CircleAvatar(),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('$userName'),
+                  Expanded(child: Container()),
+                  IconButton(
+                    icon: const Icon(Icons.photo_camera),
+                    onPressed: () async => _pickImageFromCamera(),
+                    tooltip: 'Shoot picture',
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.photo),
+                    onPressed: () async => _pickImageFromGallery(),
+                    tooltip: 'Pick from gallery',
+                  ),
+                ],
+              ),
+            ),
+            if (this._imageFile == null)
+              Container(
+                width: double.infinity,
+                height: screenHeight / 3.5,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/uploadPhoto.png"),
+                      fit: BoxFit.fitHeight),
+                ),
+              )
+            else
+              Image.file(this._imageFile!),
+            Container(
+              width: double.infinity,
+              height: screenHeight / 3.5,
+              padding: EdgeInsets.all(10),
+              child: TextField(
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'What\'s on your mind?',
+                  hintStyle: TextStyle(color: Colors.black12, fontSize: 24),
+                ),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 100,
+              padding: EdgeInsets.all(20),
+              child: ElevatedButton(
+                onPressed: () {
+                  print('post created');
+                },
+                child: Text('Create Post'),
+              ),
+            )
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -144,17 +192,23 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     );
   }
 
-  void fillData() {
-    setState(() {
-      _postData.add(ImagePostInfo(
-        imageUrl:
-            'https://images.pexels.com/videos/856065/pictures/preview-0.jpg',
-        imageTitle: 'Image 1',
-      ));
-      _postData.add(ImagePostInfo(
-        imageUrl:
-            'https://images.pexels.com/videos/856065/pictures/preview-0.jpg',
-      ));
-    });
+  Future<void> _pickImageFromGallery() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() => this._imageFile = File(pickedFile.path));
+    }
+  }
+
+  Future<void> _pickImageFromCamera() async {
+    var status = await Permission.camera.status;
+    print(status.isDenied);
+    if (await Permission.camera.request().isGranted) {
+      final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+      if (pickedFile != null) {
+        setState(() => this._imageFile = File(pickedFile.path));
+      }
+    } else {
+      print('premission not granted');
+    }
   }
 }
