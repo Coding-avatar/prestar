@@ -1,12 +1,10 @@
 import 'package:better_player/better_player.dart';
-import 'package:chewie/chewie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prestar/models/imagePostInfo.dart';
 import 'package:prestar/views/screens/ProfileScreen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:prestar/views/widgets/imagePost.dart';
-import 'package:video_player/video_player.dart';
 
 import 'GoLiveDescriptionScreen.dart';
 import 'PostScreen.dart';
