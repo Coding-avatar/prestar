@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prestar/views/screens/CommentsScreen.dart';
+import 'package:prestar/views/screens/LikesScreen.dart';
 
 class ImagePost extends StatefulWidget {
   final String userName;
-  final String imageTitle;
+  final String postTime;
   final String imageDescription;
   final String numberOfLikes;
   final String numberOfComments;
@@ -12,7 +14,7 @@ class ImagePost extends StatefulWidget {
   const ImagePost(
       {Key? key,
       this.userName = "User Name",
-      this.imageTitle = "Image title",
+      this.postTime = "1 min ago",
       this.imageDescription = "This is a small image description",
       this.numberOfLikes = "0",
       this.numberOfComments = "0",
@@ -24,46 +26,108 @@ class ImagePost extends StatefulWidget {
   _ImagePostState createState() => _ImagePostState();
 }
 
+enum Options {
+  none,
+  copy,
+  unfollow,
+  report,
+}
+
 class _ImagePostState extends State<ImagePost> {
   bool _isLiked = false;
-  bool _isCommented = false;
   bool _isShared = false;
+  var _selection = Options.none;
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
       margin: EdgeInsets.only(bottom: 10),
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            widget.userName,
-            style: TextStyle(fontSize: 18),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Text(
+                        widget.userName,
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black87,
+                            fontWeight: FontWeight.w700),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        'Posted ${widget.postTime}',
+                        style: TextStyle(fontSize: 12, color: Colors.black38),
+                      ),
+                    ],
+                  ),
+                  Text(widget.imageDescription),
+                ],
+              ),
+              PopupMenuButton<Options>(
+                padding: EdgeInsets.all(0),
+                iconSize: 20,
+                onSelected: (Options result) {
+                  setState(() {
+                    _selection = result;
+                  });
+                },
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuEntry<Options>>[
+                  const PopupMenuItem<Options>(
+                    value: Options.copy,
+                    child: Text('Copy Post'),
+                  ),
+                  const PopupMenuItem<Options>(
+                    value: Options.unfollow,
+                    child: Text('Unfollow'),
+                  ),
+                  const PopupMenuItem<Options>(
+                    value: Options.report,
+                    child: Text('Report Problem'),
+                  ),
+                ],
+              )
+            ],
           ),
           SizedBox(
-            height: 10,
+            height: 5,
           ),
           AspectRatio(
             aspectRatio: 16 / 9,
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [BoxShadow(color: Colors.black, blurRadius: 5)]),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.network(
+                  widget.imageUrl,
+                  fit: BoxFit.cover,
+                ),
               ),
-              child: Image.network(widget.imageUrl),
             ),
           ),
-          Text(widget.imageTitle),
-          Text(widget.imageDescription),
-          Divider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
                   IconButton(
+                    padding: EdgeInsets.zero,
                     onPressed: () {
                       setState(() {
                         _isLiked = !_isLiked;
@@ -72,35 +136,50 @@ class _ImagePostState extends State<ImagePost> {
                     icon: Icon(
                       Icons.thumb_up,
                       color: _isLiked ? Colors.indigo : Colors.grey,
+                      size: 20,
                     ),
                   ),
                   SizedBox(
                     width: 5,
                   ),
                   Text(widget.numberOfLikes),
-                  Text(' Like')
-                ],
-              ),
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _isCommented = !_isCommented;
-                      });
-                    },
-                    icon: Icon(
-                      Icons.comment_bank_outlined,
-                      color: _isCommented ? Colors.indigo : Colors.grey,
+                  InkWell(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => LikesScreen(),
+                      ),
                     ),
-                  ),
-                  Text(widget.numberOfComments),
-                  Text(' Comment')
+                    child: Text(
+                      ' Like',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  )
                 ],
+              ),
+              InkWell(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CommentsScreen(),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.comment_bank_outlined,
+                      color: Colors.indigo,
+                    ),
+                    Text(widget.numberOfComments),
+                    Text(' Comment')
+                  ],
+                ),
               ),
               Row(
                 children: [
                   IconButton(
+                    padding: EdgeInsets.zero,
                     onPressed: () {
                       setState(() {
                         _isShared = !_isShared;
@@ -108,7 +187,7 @@ class _ImagePostState extends State<ImagePost> {
                     },
                     icon: Icon(
                       Icons.share,
-                      color: _isShared ? Colors.indigo : Colors.grey,
+                      color: Colors.indigo,
                     ),
                   ),
                   Text(widget.numberOfLikes),
