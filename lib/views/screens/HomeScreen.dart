@@ -404,7 +404,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _postData.add(ImagePostInfo(
         imageUrl:
-            'https://images.pexels.com/videos/856065/pictures/preview-0.jpg',
+            'https://images.pexels.com/photos/7365263/pexels-photo-7365263.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
         imageTitle: 'Image 1',
       ));
       _postData.add(ImagePostInfo(
