@@ -6,10 +6,9 @@ import 'package:prestar/views/screens/NotificationScreen.dart';
 import 'package:prestar/views/screens/ProfileScreen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:prestar/views/widgets/imagePost.dart';
-
-import 'GoLiveDescriptionScreen.dart';
-import 'PostScreen.dart';
-import 'VideoPostScreen.dart';
+import 'package:prestar/views/screens/GoLiveDescriptionScreen.dart';
+import 'package:prestar/views/screens/PostScreen.dart';
+import 'package:prestar/views/screens/VideoPostScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -108,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             icon: ImageIcon(
               AssetImage("assets/icons/bell.png"),
-              color: Colors.black87,
+              color: Colors.indigo,
             ),
           ),
           SizedBox(
@@ -116,207 +115,210 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      body: SafeArea(
-        child: Container(
-          width: screenWidth,
-          height: screenHeight,
-          child: SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
-            child: Column(
-              children: [
-                // Container(
-                //   height: 55,
-                //   decoration: BoxDecoration(
-                //     gradient: LinearGradient(
-                //         colors: [Color(0xff153c8d), Color(0xff0d2454)],
-                //         begin: Alignment.topCenter,
-                //         end: Alignment.bottomCenter),
-                //   ),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     children: [
-                //       Padding(
-                //         padding: const EdgeInsets.only(left: 10),
-                //         child: Image.asset(
-                //           "assets/logo/prestarold.png",
-                //           height: 70,
-                //           color: Colors.white,
-                //           width: screenWidth / 3,
-                //         ),
-                //       ),
-                //       IconButton(
-                //         onPressed: null,
-                //         icon: ImageIcon(
-                //           AssetImage("assets/icons/bell.png"),
-                //           color: Colors.white,
-                //         ),
-                //       )
-                //     ],
-                //   ),
-                // ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Icon(
-                          Icons.search,
-                          color: Color(0xff092497),
-                          size: 25,
+      body: WillPopScope(
+        onWillPop: _onBackPressed,
+        child: SafeArea(
+          child: Container(
+            width: screenWidth,
+            height: screenHeight,
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  // Container(
+                  //   height: 55,
+                  //   decoration: BoxDecoration(
+                  //     gradient: LinearGradient(
+                  //         colors: [Color(0xff153c8d), Color(0xff0d2454)],
+                  //         begin: Alignment.topCenter,
+                  //         end: Alignment.bottomCenter),
+                  //   ),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       Padding(
+                  //         padding: const EdgeInsets.only(left: 10),
+                  //         child: Image.asset(
+                  //           "assets/logo/prestarold.png",
+                  //           height: 70,
+                  //           color: Colors.white,
+                  //           width: screenWidth / 3,
+                  //         ),
+                  //       ),
+                  //       IconButton(
+                  //         onPressed: null,
+                  //         icon: ImageIcon(
+                  //           AssetImage("assets/icons/bell.png"),
+                  //           color: Colors.white,
+                  //         ),
+                  //       )
+                  //     ],
+                  //   ),
+                  // ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 10),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Icon(
+                            Icons.search,
+                            color: Color(0xff092497),
+                            size: 25,
+                          ),
                         ),
-                      ),
-                      Expanded(
+                        Expanded(
+                          child: Material(
+                            elevation: 15,
+                            shadowColor: Colors.black,
+                            borderRadius: BorderRadius.circular(25),
+                            child: TextField(
+                              decoration: new InputDecoration(
+                                border: new OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                  // borderSide: new BorderSide(color: Colors.teal),
+                                ),
+                                enabledBorder: new OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                  borderSide: new BorderSide(
+                                    color: Colors.transparent,
+                                  ),
+                                ),
+                                isDense: true,
+                                hintText: 'Search',
+                                hintStyle:
+                                    TextStyle(color: Colors.grey, fontSize: 14),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 25, vertical: 10),
+                                filled: true,
+                                fillColor: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  CarouselSlider.builder(
+                    itemCount: bannerImages.length,
+                    itemBuilder: (BuildContext context, int itemIndex,
+                            int pageViewIndex) =>
+                        Container(
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.fromLTRB(15, 5, 15, 20),
                         child: Material(
-                          elevation: 15,
+                          elevation: 10,
                           shadowColor: Colors.black,
                           borderRadius: BorderRadius.circular(25),
-                          child: TextField(
-                            decoration: new InputDecoration(
-                              border: new OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25),
-                                // borderSide: new BorderSide(color: Colors.teal),
-                              ),
-                              enabledBorder: new OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25),
-                                borderSide: new BorderSide(
-                                  color: Colors.transparent,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(25),
+                            child: Image.network(
+                              bannerImages[itemIndex],
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    options: CarouselOptions(
+                      viewportFraction: 1,
+                      height: 160,
+                      initialPage: 0,
+                      enableInfiniteScroll: true,
+                      reverse: false,
+                      autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 3),
+                      autoPlayAnimationDuration: Duration(milliseconds: 800),
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      // enlargeCenterPage: true,
+                      scrollDirection: Axis.horizontal,
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.only(
+                      right: 10,
+                      left: 10,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Recent Live Videos',
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.w800),
+                        ),
+                        Text(
+                          'View All',
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.blue,
+                              fontWeight: FontWeight.w800),
+                        ),
+                      ],
+                    ),
+                  ),
+                  CarouselSlider.builder(
+                    itemCount: bannerVideos.length,
+                    itemBuilder: (BuildContext context, int itemIndex,
+                            int pageViewIndex) =>
+                        Container(
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
+                        child: Material(
+                          elevation: 10,
+                          shadowColor: Colors.black,
+                          borderRadius: BorderRadius.circular(25),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(25),
+                            child: AspectRatio(
+                              aspectRatio: 16 / 9,
+                              child: BetterPlayer.network(
+                                bannerVideos[itemIndex]['video'],
+                                betterPlayerConfiguration:
+                                    BetterPlayerConfiguration(
+                                  placeholder: Image.network(
+                                      bannerVideos[itemIndex]['thumbnail']),
+                                  autoPlay: false,
+                                  controlsConfiguration:
+                                      BetterPlayerControlsConfiguration(
+                                          enableMute: true),
+                                  aspectRatio: 16 / 9,
                                 ),
                               ),
-                              isDense: true,
-                              hintText: 'Search',
-                              hintStyle:
-                                  TextStyle(color: Colors.grey, fontSize: 14),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 25, vertical: 10),
-                              filled: true,
-                              fillColor: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                CarouselSlider.builder(
-                  itemCount: bannerImages.length,
-                  itemBuilder: (BuildContext context, int itemIndex,
-                          int pageViewIndex) =>
-                      Container(
-                    child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.fromLTRB(15, 5, 15, 20),
-                      child: Material(
-                        elevation: 10,
-                        shadowColor: Colors.black,
-                        borderRadius: BorderRadius.circular(25),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(25),
-                          child: Image.network(
-                            bannerImages[itemIndex],
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  options: CarouselOptions(
-                    viewportFraction: 1,
-                    height: 160,
-                    initialPage: 0,
-                    enableInfiniteScroll: true,
-                    reverse: false,
-                    autoPlay: true,
-                    autoPlayInterval: Duration(seconds: 3),
-                    autoPlayAnimationDuration: Duration(milliseconds: 800),
-                    autoPlayCurve: Curves.fastOutSlowIn,
-                    // enlargeCenterPage: true,
-                    scrollDirection: Axis.horizontal,
-                  ),
-                ),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.only(
-                    right: 10,
-                    left: 10,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Recent Live Videos',
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black87,
-                            fontWeight: FontWeight.w800),
-                      ),
-                      Text(
-                        'View All',
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.blue,
-                            fontWeight: FontWeight.w800),
-                      ),
-                    ],
-                  ),
-                ),
-                CarouselSlider.builder(
-                  itemCount: bannerVideos.length,
-                  itemBuilder: (BuildContext context, int itemIndex,
-                          int pageViewIndex) =>
-                      Container(
-                    child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
-                      child: Material(
-                        elevation: 10,
-                        shadowColor: Colors.black,
-                        borderRadius: BorderRadius.circular(25),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(25),
-                          child: AspectRatio(
-                            aspectRatio: 16 / 9,
-                            child: BetterPlayer.network(
-                              bannerVideos[itemIndex]['video'],
-                              betterPlayerConfiguration:
-                                  BetterPlayerConfiguration(
-                                placeholder: Image.network(
-                                    bannerVideos[itemIndex]['thumbnail']),
-                                autoPlay: false,
-                                controlsConfiguration:
-                                    BetterPlayerControlsConfiguration(
-                                        enableMute: true),
-                                aspectRatio: 16 / 9,
-                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
+                    options: CarouselOptions(
+                      viewportFraction: 1,
+                      initialPage: 0,
+                      enableInfiniteScroll: true,
+                      reverse: false,
+                      autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 5),
+                      autoPlayAnimationDuration: Duration(milliseconds: 800),
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      // enlargeCenterPage: true,
+                      scrollDirection: Axis.horizontal,
+                    ),
                   ),
-                  options: CarouselOptions(
-                    viewportFraction: 1,
-                    initialPage: 0,
-                    enableInfiniteScroll: true,
-                    reverse: false,
-                    autoPlay: true,
-                    autoPlayInterval: Duration(seconds: 5),
-                    autoPlayAnimationDuration: Duration(milliseconds: 800),
-                    autoPlayCurve: Curves.fastOutSlowIn,
-                    // enlargeCenterPage: true,
-                    scrollDirection: Axis.horizontal,
-                  ),
-                ),
-                ListView.builder(
-                  itemCount: _postData.length,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return ImagePost(imageUrl: _postData[index].imageUrl);
-                  },
-                )
-              ],
+                  ListView.builder(
+                    itemCount: _postData.length,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return ImagePost(imageUrl: _postData[index].imageUrl);
+                    },
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -370,28 +372,28 @@ class _HomeScreenState extends State<HomeScreen> {
             case 0:
               break;
             case 1:
-              Navigator.of(context).pushReplacement(
+              Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => CreatePostScreen(),
                 ),
               );
               break;
             case 2:
-              Navigator.of(context).pushReplacement(
+              Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => GoLiveDescriptionScreen(),
                 ),
               );
               break;
             case 3:
-              Navigator.of(context).pushReplacement(
+              Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => VideoPostScreen(),
                 ),
               );
               break;
             case 4:
-              Navigator.of(context).pushReplacement(
+              Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => ProfileScreen(),
                 ),
@@ -415,5 +417,31 @@ class _HomeScreenState extends State<HomeScreen> {
             'https://images.pexels.com/videos/856065/pictures/preview-0.jpg',
       ));
     });
+  }
+
+  Future<bool> _onBackPressed() async {
+    return (await showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Are you sure?'),
+                content: Text('Do you want to exit an App'),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text('No'),
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                  ),
+                  TextButton(
+                    child: Text('Yes'),
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                  )
+                ],
+              );
+            })) ??
+        false;
   }
 }
