@@ -4,9 +4,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:prestar/views/screens/editProfileScreen.dart';
 import 'package:prestar/views/widgets/videoPost.dart';
-
 import 'GoLiveDescriptionScreen.dart';
-import 'HomeScreen.dart';
+import 'NotificationScreen.dart';
 import 'PostScreen.dart';
 import 'VideoPostScreen.dart';
 
@@ -35,11 +34,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-          leading: Icon(Icons.menu),
-          title: Text('Profile'),
+          backgroundColor: Color(0xfff1eeee),
+          leading: InkWell(
+            onTap: () {
+              Navigator.of(context).popUntil(
+                (route) => route.isFirst,
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset(
+                "assets/logo/prestar_small_logo.png",
+                height: 30,
+                width: screenWidth / 3,
+              ),
+            ),
+          ),
+          title: Text(
+            'Profile',
+            style: TextStyle(color: Colors.black87),
+          ),
           centerTitle: true,
           actions: [
-            Icon(Icons.more_vert),
+            IconButton(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => NotificationScreen(),
+                ),
+              ),
+              icon: ImageIcon(
+                AssetImage("assets/icons/bell.png"),
+                color: Colors.indigo,
+              ),
+            ),
             SizedBox(
               width: 15,
             )
@@ -213,8 +240,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         begin: Alignment.topCenter,
                                         end: Alignment.bottomCenter),
                                     borderRadius: BorderRadius.circular(15),
-                                    border: Border.all(
-                                        color: Colors.black87, width: 1),
                                     boxShadow: [
                                       BoxShadow(
                                           color: Colors.black87,
@@ -238,8 +263,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         begin: Alignment.topCenter,
                                         end: Alignment.bottomCenter),
                                     borderRadius: BorderRadius.circular(15),
-                                    border: Border.all(
-                                        color: Colors.black87, width: 1),
                                     boxShadow: [
                                       BoxShadow(
                                           color: Colors.black87,
@@ -263,8 +286,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         begin: Alignment.topCenter,
                                         end: Alignment.bottomCenter),
                                     borderRadius: BorderRadius.circular(15),
-                                    border: Border.all(
-                                        color: Colors.black87, width: 1),
                                     boxShadow: [
                                       BoxShadow(
                                           color: Colors.black87,
@@ -473,28 +494,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
           onTap: (index) {
             switch (index) {
               case 0:
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => HomeScreen(),
-                  ),
+                Navigator.of(context).popUntil(
+                  (route) => route.isFirst,
                 );
                 break;
               case 1:
-                Navigator.of(context).pushReplacement(
+                Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => CreatePostScreen(),
                   ),
                 );
                 break;
               case 2:
-                Navigator.of(context).pushReplacement(
+                Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => GoLiveDescriptionScreen(),
                   ),
                 );
                 break;
               case 3:
-                Navigator.of(context).pushReplacement(
+                Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => VideoPostScreen(),
                   ),
