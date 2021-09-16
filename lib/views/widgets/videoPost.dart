@@ -63,17 +63,17 @@ class _VideoPostState extends State<VideoPost> {
                 '${widget.userName} ',
                 style: TextStyle(
                     color: Colors.black87,
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.w500),
               ),
               Text(
                 'was live at ${widget.lastActiveTime} ',
-                style: TextStyle(color: Colors.black54, fontSize: 16),
+                style: TextStyle(color: Colors.black54, fontSize: 14),
               ),
               Expanded(child: SizedBox()),
               Text(
                 '${widget.numberOfViews} ',
-                style: TextStyle(color: Colors.black54, fontSize: 16),
+                style: TextStyle(color: Colors.black54, fontSize: 14),
               ),
               PopupMenuButton<Options>(
                 padding: EdgeInsets.all(0),
@@ -137,7 +137,7 @@ class _VideoPostState extends State<VideoPost> {
               widget.videoTitle,
               style: TextStyle(
                   color: Colors.black87,
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.w500),
             ),
           ),
@@ -145,7 +145,7 @@ class _VideoPostState extends State<VideoPost> {
             widget.videoDescription,
             style: TextStyle(
                 color: Colors.black54,
-                fontSize: 14,
+                fontSize: 13,
                 fontWeight: FontWeight.w300),
           ),
           Divider(),
@@ -154,14 +154,13 @@ class _VideoPostState extends State<VideoPost> {
             children: [
               Row(
                 children: [
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () {
+                  InkWell(
+                    onTap: () {
                       setState(() {
                         _isLiked = !_isLiked;
                       });
                     },
-                    icon: Icon(
+                    child: Icon(
                       Icons.thumb_up,
                       color: _isLiked ? Colors.indigo : Colors.grey,
                       size: 20,
@@ -170,7 +169,13 @@ class _VideoPostState extends State<VideoPost> {
                   SizedBox(
                     width: 5,
                   ),
-                  Text(widget.numberOfLikes),
+                  Text(
+                    widget.numberOfLikes,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
                   InkWell(
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
@@ -199,27 +204,50 @@ class _VideoPostState extends State<VideoPost> {
                       Icons.comment_bank_outlined,
                       color: Colors.indigo,
                     ),
-                    Text(widget.numberOfComments),
-                    Text(' Comment')
+                    Text(
+                      widget.numberOfComments,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    Text(
+                      ' Comment',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    )
                   ],
                 ),
               ),
               Row(
                 children: [
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () {
+                  InkWell(
+                    onTap: () {
                       setState(() {
                         _isShared = !_isShared;
                       });
                     },
-                    icon: Icon(
+                    child: Icon(
                       Icons.share,
                       color: Colors.indigo,
                     ),
                   ),
-                  Text(widget.numberOfLikes),
-                  Text(' Share')
+                  Text(
+                    widget.numberOfLikes,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  Text(
+                    ' Share',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  )
                 ],
               ),
             ],
