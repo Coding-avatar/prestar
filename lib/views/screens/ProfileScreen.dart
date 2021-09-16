@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:prestar/views/screens/editProfileScreen.dart';
 import 'package:prestar/views/widgets/videoPost.dart';
 
 import 'GoLiveDescriptionScreen.dart';
@@ -194,6 +195,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               InkWell(
+                                onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => EditProfileScreen(),
+                                  ),
+                                ),
                                 child: Container(
                                   width: screenWidth / 4,
                                   alignment: Alignment.center,
