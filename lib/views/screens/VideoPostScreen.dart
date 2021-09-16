@@ -4,6 +4,7 @@ import 'package:prestar/views/widgets/videoPost.dart';
 
 import 'GoLiveDescriptionScreen.dart';
 import 'HomeScreen.dart';
+import 'NotificationScreen.dart';
 import 'ProfileScreen.dart';
 
 class VideoPostScreen extends StatefulWidget {
@@ -21,28 +22,42 @@ class _VideoPostScreenState extends State<VideoPostScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xfff1eeee),
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: Image.asset(
-            "assets/logo/prestarold.png",
-            height: 40,
-            width: screenWidth / 3,
+        leading: InkWell(
+          onTap: () {
+            Navigator.of(context).popUntil(
+              (route) => route.isFirst,
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset(
+              "assets/logo/prestar_small_logo.png",
+              height: 30,
+              width: screenWidth / 3,
+            ),
           ),
         ),
-        leadingWidth: 130,
+        title: Text(
+          'Videos',
+          style: TextStyle(color: Colors.black87),
+        ),
         centerTitle: true,
-        // actions: [
-        //   IconButton(
-        //     onPressed: null,
-        //     icon: ImageIcon(
-        //       AssetImage("assets/icons/bell.png"),
-        //       color: Colors.black87,
-        //     ),
-        //   ),
-        //   SizedBox(
-        //     width: 15,
-        //   )
-        // ],
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => NotificationScreen(),
+              ),
+            ),
+            icon: ImageIcon(
+              AssetImage("assets/icons/bell.png"),
+              color: Colors.indigo,
+            ),
+          ),
+          SizedBox(
+            width: 15,
+          )
+        ],
       ),
       body: Container(
         width: screenWidth,
@@ -51,6 +66,51 @@ class _VideoPostScreenState extends State<VideoPostScreen> {
           physics: AlwaysScrollableScrollPhysics(),
           child: Column(
             children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Icon(
+                        Icons.search,
+                        color: Color(0xff092497),
+                        size: 25,
+                      ),
+                    ),
+                    Expanded(
+                      child: Material(
+                        elevation: 15,
+                        shadowColor: Colors.black,
+                        borderRadius: BorderRadius.circular(25),
+                        child: TextField(
+                          decoration: new InputDecoration(
+                            border: new OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              // borderSide: new BorderSide(color: Colors.teal),
+                            ),
+                            enabledBorder: new OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: new BorderSide(
+                                color: Colors.transparent,
+                              ),
+                            ),
+                            isDense: true,
+                            hintText: 'Search',
+                            hintStyle:
+                                TextStyle(color: Colors.grey, fontSize: 14),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 25, vertical: 10),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               VideoPost(
                 userName: "Ruvim Miksanskiy",
                 lastActiveTime: "5 min ago",
@@ -158,21 +218,19 @@ class _VideoPostScreenState extends State<VideoPostScreen> {
         onTap: (index) {
           switch (index) {
             case 0:
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => HomeScreen(),
-                ),
+              Navigator.of(context).popUntil(
+                (route) => route.isFirst,
               );
               break;
             case 1:
-              Navigator.of(context).pushReplacement(
+              Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => CreatePostScreen(),
                 ),
               );
               break;
             case 2:
-              Navigator.of(context).pushReplacement(
+              Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => GoLiveDescriptionScreen(),
                 ),
@@ -181,7 +239,7 @@ class _VideoPostScreenState extends State<VideoPostScreen> {
             case 3:
               break;
             case 4:
-              Navigator.of(context).pushReplacement(
+              Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => ProfileScreen(),
                 ),
