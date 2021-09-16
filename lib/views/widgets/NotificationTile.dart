@@ -39,9 +39,10 @@ class _NotificationTileState extends State<NotificationTile> {
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 10,
-                        offset: Offset(1, 1))
+                      color: Colors.black26,
+                      blurRadius: 10,
+                      offset: Offset(1, 1),
+                    ),
                   ]),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
