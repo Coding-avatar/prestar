@@ -17,7 +17,12 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
         width: screenWidth,
         height: screenHeight,
         child: Column(
-          children: [Text('This is business profile')],
+          children: [
+            Text('This is business profile'),
+            // Business Name
+            // Business catagory
+            // Business Logo
+          ],
         ),
       ),
     );
