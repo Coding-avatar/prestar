@@ -3,11 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:prestar/views/screens/GoLiveDescriptionScreen.dart';
-import 'package:prestar/views/screens/HomeScreen.dart';
 import 'package:prestar/views/screens/VideoPostScreen.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:prestar/views/screens/ProfileScreen.dart';
+
+import 'NotificationScreen.dart';
 
 class CreatePostScreen extends StatefulWidget {
   const CreatePostScreen({Key? key}) : super(key: key);
@@ -33,16 +34,42 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Color(0xfff1eeee),
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: Image.asset(
-            "assets/logo/prestarold.png",
-            height: 40,
-            width: screenWidth / 3,
+        leading: InkWell(
+          onTap: () {
+            Navigator.of(context).popUntil(
+              (route) => route.isFirst,
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset(
+              "assets/logo/prestar_small_logo.png",
+              height: 30,
+              width: screenWidth / 3,
+            ),
           ),
         ),
-        leadingWidth: 130,
+        title: Text(
+          'Create Post',
+          style: TextStyle(color: Colors.black87),
+        ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => NotificationScreen(),
+              ),
+            ),
+            icon: ImageIcon(
+              AssetImage("assets/icons/bell.png"),
+              color: Colors.indigo,
+            ),
+          ),
+          SizedBox(
+            width: 15,
+          )
+        ],
       ),
       body: Container(
         width: screenWidth,
@@ -167,30 +194,28 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         onTap: (index) {
           switch (index) {
             case 0:
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => HomeScreen(),
-                ),
+              Navigator.of(context).popUntil(
+                (route) => route.isFirst,
               );
               break;
             case 1:
               break;
             case 2:
-              Navigator.of(context).pushReplacement(
+              Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => GoLiveDescriptionScreen(),
                 ),
               );
               break;
             case 3:
-              Navigator.of(context).pushReplacement(
+              Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => VideoPostScreen(),
                 ),
               );
               break;
             case 4:
-              Navigator.of(context).pushReplacement(
+              Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => ProfileScreen(),
                 ),
