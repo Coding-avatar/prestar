@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prestar/views/screens/PostScreen.dart';
+import 'package:prestar/views/widgets/videoPost.dart';
 
 import 'GoLiveDescriptionScreen.dart';
 import 'HomeScreen.dart';
@@ -46,6 +47,69 @@ class _VideoPostScreenState extends State<VideoPostScreen> {
       body: Container(
         width: screenWidth,
         height: screenHeight,
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Column(
+            children: [
+              VideoPost(
+                userName: "Ruvim Miksanskiy",
+                lastActiveTime: "5 min ago",
+                numberOfComments: "142",
+                numberOfLikes: "561",
+                numberOfViews: "1042",
+                videoDescription:
+                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                videoThumbnail:
+                    "https://images.pexels.com/videos/1526909/pictures/preview-1.jpg",
+                videoTitle: "Seal on the beach",
+                videoUrl:
+                    "https://player.vimeo.com/external/296210754.sd.mp4?s=9db41d71fa61a2cc19757f656fc5c5c5ef9f69ec&profile_id=164&oauth2_token_id=57447761",
+              ),
+              VideoPost(
+                userName: "Oleg Magni",
+                lastActiveTime: "15 min ago",
+                numberOfComments: "51",
+                numberOfLikes: "997",
+                numberOfViews: "2048",
+                videoDescription:
+                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                videoThumbnail:
+                    "https://images.pexels.com/videos/1510090/pictures/preview-1.jpg",
+                videoTitle: "Silhouette Of Maple Leaves",
+                videoUrl:
+                    "https://player.vimeo.com/external/295482071.sd.mp4?s=238ca35e1e9ae91fd08ce5e290c1f168c7f1fe1b&profile_id=164&oauth2_token_id=57447761",
+              ),
+              VideoPost(
+                userName: "Visually Us",
+                lastActiveTime: "1 hour ago",
+                numberOfComments: "252",
+                numberOfLikes: "704",
+                numberOfViews: "1897",
+                videoDescription:
+                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                videoThumbnail:
+                    "https://images.pexels.com/videos/1494284/pictures/preview-1.jpg",
+                videoTitle: "Red Autumn leaves",
+                videoUrl:
+                    "https://player.vimeo.com/external/294394804.sd.mp4?s=0ae63fad00aa2702fd154632d9ed93fb7d7ee543&profile_id=164&oauth2_token_id=57447761",
+              ),
+              VideoPost(
+                userName: "Pixabay",
+                lastActiveTime: "2 hours ago",
+                numberOfComments: "252",
+                numberOfLikes: "10340",
+                numberOfViews: "20440",
+                videoDescription:
+                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                videoThumbnail:
+                    "https://images.pexels.com/videos/856973/pictures/preview-1.jpg",
+                videoTitle: "Sunset Time lapse video",
+                videoUrl:
+                    "https://player.vimeo.com/external/226685105.sd.mp4?s=90e56fbbb50fbc68a850f8db3f051c7465bfef71&profile_id=164&oauth2_token_id=57447761",
+              ),
+            ],
+          ),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 3,
