@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:prestar/views/screens/PostScreen.dart';
 import 'package:prestar/views/widgets/CustomGenderRadioButton.dart';
 import 'package:prestar/views/widgets/CustomLogoRadioButton.dart';
-
-import 'HomeScreen.dart';
+import 'NotificationScreen.dart';
 import 'ProfileScreen.dart';
 import 'VideoPostScreen.dart';
 
@@ -37,28 +36,42 @@ class _GoLiveDescriptionScreenState extends State<GoLiveDescriptionScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xfff1eeee),
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: Image.asset(
-            "assets/logo/prestarold.png",
-            height: 40,
-            width: screenWidth / 3,
+        leading: InkWell(
+          onTap: () {
+            Navigator.of(context).popUntil(
+              (route) => route.isFirst,
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset(
+              "assets/logo/prestar_small_logo.png",
+              height: 30,
+              width: screenWidth / 3,
+            ),
           ),
         ),
-        leadingWidth: 130,
+        title: Text(
+          'Go Live',
+          style: TextStyle(color: Colors.black87),
+        ),
         centerTitle: true,
-        // actions: [
-        //   IconButton(
-        //     onPressed: null,
-        //     icon: ImageIcon(
-        //       AssetImage("assets/icons/bell.png"),
-        //       color: Colors.black87,
-        //     ),
-        //   ),
-        //   SizedBox(
-        //     width: 15,
-        //   )
-        // ],
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => NotificationScreen(),
+              ),
+            ),
+            icon: ImageIcon(
+              AssetImage("assets/icons/bell.png"),
+              color: Colors.indigo,
+            ),
+          ),
+          SizedBox(
+            width: 15,
+          )
+        ],
       ),
       body: Container(
         width: screenWidth,
@@ -84,15 +97,16 @@ class _GoLiveDescriptionScreenState extends State<GoLiveDescriptionScreen> {
                     width: double.infinity,
                     height: 80,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        color: Colors.transparent,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 10,
-                            offset: Offset(1, 1),
-                          ),
-                        ]),
+                      borderRadius: BorderRadius.circular(25),
+                      color: Colors.transparent,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 10,
+                          offset: Offset(1, 1),
+                        ),
+                      ],
+                    ),
                   ),
                   TextField(
                     decoration: InputDecoration(
@@ -163,13 +177,13 @@ class _GoLiveDescriptionScreenState extends State<GoLiveDescriptionScreen> {
                   CustomGenderRadioButton(
                       value: 'Male',
                       groupValue: _groupValue,
-                      labelIcon: "assets/icons/bell.png",
+                      labelIcon: "assets/icons/male.png",
                       onChanged: _valueChangedHandler(),
                       text: 'Male'),
                   CustomGenderRadioButton(
                       value: 'Female',
                       groupValue: _groupValue,
-                      labelIcon: "assets/icons/bell.png",
+                      labelIcon: "assets/icons/female.png",
                       onChanged: _valueChangedHandler(),
                       text: 'Female'),
                   Padding(
@@ -177,7 +191,7 @@ class _GoLiveDescriptionScreenState extends State<GoLiveDescriptionScreen> {
                     child: CustomGenderRadioButton(
                         value: 'Both',
                         groupValue: _groupValue,
-                        labelIcon: "assets/icons/bell.png",
+                        labelIcon: "assets/icons/both.png",
                         onChanged: _valueChangedHandler(),
                         text: 'Both'),
                   ),
@@ -289,14 +303,12 @@ class _GoLiveDescriptionScreenState extends State<GoLiveDescriptionScreen> {
         onTap: (index) {
           switch (index) {
             case 0:
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => HomeScreen(),
-                ),
+              Navigator.of(context).popUntil(
+                (route) => route.isFirst,
               );
               break;
             case 1:
-              Navigator.of(context).pushReplacement(
+              Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => CreatePostScreen(),
                 ),
@@ -305,14 +317,14 @@ class _GoLiveDescriptionScreenState extends State<GoLiveDescriptionScreen> {
             case 2:
               break;
             case 3:
-              Navigator.of(context).pushReplacement(
+              Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => VideoPostScreen(),
                 ),
               );
               break;
             case 4:
-              Navigator.of(context).pushReplacement(
+              Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => ProfileScreen(),
                 ),
