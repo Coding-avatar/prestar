@@ -78,15 +78,33 @@ class _GoLiveDescriptionScreenState extends State<GoLiveDescriptionScreen> {
               SizedBox(
                 height: 10,
               ),
-              TextField(
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white),
-                maxLines: 2,
-                maxLength: 50,
+              Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 80,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: Colors.transparent,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 10,
+                            offset: Offset(1, 1),
+                          ),
+                        ]),
+                  ),
+                  TextField(
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white),
+                    maxLines: 2,
+                    maxLength: 50,
+                  ),
+                ],
               ),
               Text(
                 'Description',
@@ -98,15 +116,33 @@ class _GoLiveDescriptionScreenState extends State<GoLiveDescriptionScreen> {
               SizedBox(
                 height: 10,
               ),
-              TextField(
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white),
-                maxLines: 3,
-                maxLength: 150,
+              Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 110,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: Colors.transparent,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 10,
+                            offset: Offset(1, 1),
+                          ),
+                        ]),
+                  ),
+                  TextField(
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white),
+                    maxLines: 3,
+                    maxLength: 150,
+                  ),
+                ],
               ),
               SizedBox(
                 height: 5,
