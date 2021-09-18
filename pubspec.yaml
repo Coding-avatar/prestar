@@ -39,7 +39,8 @@ dependencies:
   url_launcher: ^6.0.10
   share_plus: ^2.1.4
   intl: ^0.17.0
-
+  multi_select_flutter: ^4.0.0
+  location: ^4.3.0
 
 
 dev_dependencies:
