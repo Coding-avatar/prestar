@@ -6,7 +6,7 @@ import 'package:prestar/models/imagePostInfo.dart';
 import 'package:prestar/views/screens/NotificationScreen.dart';
 import 'package:prestar/views/screens/ProfileScreen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:prestar/views/widgets/imagePost.dart';
+import 'package:prestar/views/custom_widgets/imagePost.dart';
 import 'package:prestar/views/screens/GoLiveDescriptionScreen.dart';
 import 'package:prestar/views/screens/PostScreen.dart';
 import 'package:prestar/views/screens/VideoPostScreen.dart';

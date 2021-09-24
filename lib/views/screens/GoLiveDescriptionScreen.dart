@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prestar/views/screens/PostScreen.dart';
-import 'package:prestar/views/widgets/CustomGenderRadioButton.dart';
-import 'package:prestar/views/widgets/CustomLogoRadioButton.dart';
+import 'package:prestar/views/custom_widgets/CustomGenderRadioButton.dart';
+import 'package:prestar/views/custom_widgets/CustomLogoRadioButton.dart';
 import 'NotificationScreen.dart';
 import 'ProfileScreen.dart';
 import 'VideoPostScreen.dart';
