@@ -12,15 +12,23 @@ class MyProfileScreen extends StatefulWidget {
 }
 
 class _MyProfileScreenState extends State<MyProfileScreen> {
-  TextEditingController userNameFieldController = new TextEditingController();
-  TextEditingController userBioFieldController = new TextEditingController();
-  TextEditingController userDobFieldController = new TextEditingController();
-  TextEditingController userLocationFieldController =
-      new TextEditingController();
+  TextEditingController _textFieldController = new TextEditingController();
+  late String userName;
+  late String userBio;
+  late DateTime userDob;
+  late String dateOfBirth;
+  late String userLocation;
+  List userPreferences = List.empty(growable: true);
+  List<String> topics = [
+    'Comedy',
+    'Drama',
+    'Romance',
+    'Thriller',
+    'Action',
+    'LifeStyle'
+  ];
   String dropdownValue = '';
 
-  // List<String> choices = ['Entertainment', 'Comedy', 'Action', 'one', 'tow'];
-  // List _selectedChoices = List.empty(growable: true);
   @override
   void initState() {
     super.initState();
@@ -32,135 +40,173 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         width: screenWidth,
         height: screenHeight,
         padding: EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          children: [
-            CircleAvatar(
-              radius: 75,
-              backgroundImage: AssetImage("assets/images/profile2.jpg"),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Text('Name'),
-              width: double.infinity,
-            ),
-            // TextField(
-            //   controller: userNameFieldController,
-            //   decoration: InputDecoration(
-            //     hintText: 'Your Name',
-            //     suffixIcon: IconButton(
-            //       icon: Icon(Icons.edit),
-            //       onPressed: null,
-            //     ),
-            //   ),
-            //   enabled: false,
-            // ),
-            // Container(
-            //   margin: EdgeInsets.only(top: 10),
-            //   child: Text('Gender'),
-            //   width: double.infinity,
-            // ),
-            // DropdownButton<String>(
-            //   value: dropdownValue,
-            //   icon: const Icon(Icons.arrow_downward),
-            //   iconSize: 24, isExpanded: true, isDense: false,
-            //   elevation: 16,
-            //   style: const TextStyle(color: Colors.black87),
-            //   // underline: Container(
-            //   //   height: 2,
-            //   //   color: Colors.deepPurpleAccent,
-            //   // ),
-            //   onChanged: (String? newValue) {
-            //     setState(() {
-            //       dropdownValue = newValue!;
-            //     });
-            //   },
-            //   items: <String>['Male', 'Female', 'Other']
-            //       .map<DropdownMenuItem<String>>((String value) {
-            //     return DropdownMenuItem<String>(
-            //       value: value,
-            //       child: Expanded(child: Text(value)),
-            //     );
-            //   }).toList(),
-            // ),
-            // Container(
-            //   margin: EdgeInsets.only(top: 10),
-            //   child: Text('Bio'),
-            //   width: double.infinity,
-            // ),
-            // TextField(
-            //   controller: userBioFieldController,
-            //   decoration: InputDecoration(
-            //     hintText: 'Bio',
-            //     suffixIcon: IconButton(
-            //       icon: Icon(Icons.edit),
-            //       onPressed: null,
-            //     ),
-            //   ),
-            //   maxLines: 2,
-            //   enabled: false,
-            //   maxLength: 120,
-            // ),
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Text('Date of Birth'),
-              width: double.infinity,
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Flexible(
-                  child: TextField(
-                    controller: userDobFieldController,
-                    decoration: InputDecoration(
-                      hintText: 'Date of Birth',
-                      hintStyle: TextStyle(),
-                    ),
-                    enabled: false,
-                  ),
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Column(
+            children: [
+              CircleAvatar(
+                radius: 75,
+                backgroundImage: AssetImage("assets/images/profile2.jpg"),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  'Name',
+                  style: TextStyle(color: Colors.black38, fontSize: 14),
                 ),
-                IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () => print('hello'),
-                )
-              ],
-            ),
-            // MultiSelectDialogField(
-            //   items: choices.map((e) => MultiSelectItem(e, e)).toList(),
-            //   listType: MultiSelectListType.CHIP,
-            //   onConfirm: (values) {
-            //     _selectedChoices = values;
-            //   },
-            // ),
-            // MultiSelectChipDisplay(
-            //   items:
-            //       _selectedChoices.map((e) => MultiSelectItem(e, e)).toList(),
-            //   onTap: (value) {
-            //     setState(() {
-            //       _selectedChoices.remove(value);
-            //     });
-            //   },
-            // ),
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Text('Location'),
-              width: double.infinity,
-            ),
-            TextField(
-              controller: userLocationFieldController,
-              decoration: InputDecoration(
-                label: Text('Location'),
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: null,
+                width: double.infinity,
+              ),
+              Container(
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          userName,
+                          style: TextStyle(color: Colors.black87, fontSize: 18),
+                        ),
+                        InkWell(
+                          child: Icon(Icons.edit),
+                          onTap: () => updateUserName(),
+                        )
+                      ],
+                    ),
+                    Divider()
+                  ],
                 ),
               ),
-              enabled: false,
-            ),
-          ],
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  'Date of Birth',
+                  style: TextStyle(color: Colors.black38, fontSize: 14),
+                ),
+                width: double.infinity,
+              ),
+              Container(
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          dateOfBirth,
+                          style: TextStyle(color: Colors.black87, fontSize: 18),
+                        ),
+                        InkWell(
+                          child: Icon(Icons.edit),
+                          onTap: () => updateUserDateOfBirth(),
+                        )
+                      ],
+                    ),
+                    Divider()
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  'Location',
+                  style: TextStyle(color: Colors.black38, fontSize: 14),
+                ),
+                width: double.infinity,
+              ),
+              Container(
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          userLocation,
+                          style: TextStyle(color: Colors.black87, fontSize: 18),
+                        ),
+                        InkWell(
+                          child: Icon(Icons.edit),
+                          onTap: () => updateUserLocation(),
+                        )
+                      ],
+                    ),
+                    Divider()
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  'Bio',
+                  style: TextStyle(color: Colors.black38, fontSize: 14),
+                ),
+                width: double.infinity,
+              ),
+              Container(
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          userBio,
+                          softWrap: true,
+                          style: TextStyle(color: Colors.black87, fontSize: 18),
+                        ),
+                        InkWell(
+                          child: Icon(Icons.edit),
+                          onTap: () => updateUserBio(),
+                        )
+                      ],
+                    ),
+                    Divider()
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  'Preferences',
+                  style: TextStyle(color: Colors.black38, fontSize: 14),
+                ),
+                width: double.infinity,
+              ),
+              MultiSelectDialogField(
+                items: topics.map((e) => MultiSelectItem(e, e)).toList(),
+                listType: MultiSelectListType.CHIP,
+                searchable: true,
+                title: Text('Favorite Topics'),
+                onConfirm: (values) {
+                  userPreferences = values;
+                },
+                chipDisplay: MultiSelectChipDisplay(
+                  onTap: (value) {
+                    setState(() {
+                      userPreferences.remove(value);
+                    });
+                  },
+                ),
+              ),
+              SizedBox(height: 30),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: null,
+                  child: Text('Save Changes'),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -168,12 +214,77 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
   void updateProfileDetails() {
     setState(() {
-      userNameFieldController.text = "Rima Dutta";
-      userBioFieldController.text =
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard";
-      userLocationFieldController.text = "Kolkata";
-      userDobFieldController.text = "22/12/1997";
-      dropdownValue = 'Female';
+      userName = "Rima Dutta";
+      userBio = "I love myself!";
+      userDob = DateTime(1997, 12, 22);
+      dateOfBirth = "22/12/1997";
+      userLocation = "Kolkata";
     });
+  }
+
+  updateUserName() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return new AlertDialog(
+            title: Text("Edit "),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Update "),
+                TextField(
+                  controller: _textFieldController,
+                )
+              ],
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text("Cancel"),
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                child: Text("Okay"),
+              )
+            ],
+          );
+        });
+  }
+
+  updateUserBio() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return new AlertDialog(
+            title: Text("Edit "),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Update "),
+                TextField(
+                  controller: _textFieldController,
+                )
+              ],
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text("Cancel"),
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                child: Text("Okay"),
+              )
+            ],
+          );
+        });
+  }
+
+  updateUserDateOfBirth() {
+    ///show date picker
+  }
+
+  updateUserLocation() {
+    ///show location picker
   }
 }
