@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:multi_select_flutter/util/multi_select_list_type.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class BusinessProfileScreen extends StatefulWidget {
   const BusinessProfileScreen({Key? key}) : super(key: key);
@@ -12,6 +17,7 @@ class BusinessProfileScreen extends StatefulWidget {
 }
 
 class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
+  FirebaseStorage _storage = FirebaseStorage.instance;
   String _businessName = '';
   bool _isBusiness = false;
   List choices = [
@@ -28,6 +34,8 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
   List _selectedChoices = List.empty(growable: true);
   List _businessCategories = List.empty(growable: true);
   List _businessLogos = List.empty(growable: true);
+  File? _imageFile;
+  final _picker = ImagePicker();
   @override
   void initState() {
     super.initState();
@@ -80,7 +88,8 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
                   _selectedChoices = values;
                 });
               },
-              initialValue: [], //to be used later to fetch or update choices
+              initialValue:
+                  _businessCategories, //to be used later to fetch or update choices
               chipDisplay: MultiSelectChipDisplay(
                 onTap: (value) {
                   setState(() {
@@ -98,15 +107,46 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
                 ? Container()
                 : GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: _gridCrossAxisCount()),
+                        crossAxisCount: 4),
                     itemCount: _businessLogos.length,
                     shrinkWrap: true,
                     padding: EdgeInsets.only(bottom: 10),
                     itemBuilder: (context, index) {
-                      return Card(
-                        elevation: 5,
-                        child: Image.network(_businessLogos[index]),
-                      );
+                      if (index == 0)
+                        return InkWell(
+                          onTap: () async => _pickImageFromGallery(),
+                          child: Card(
+                            child: Image.asset(_businessLogos[index]),
+                          ),
+                        );
+                      else
+                        return Stack(
+                          children: [
+                            Card(
+                              elevation: 5,
+                              child: Image.network(_businessLogos[index]),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  _businessLogos.remove(_businessLogos[index]);
+                                });
+                              },
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: CircleAvatar(
+                                  radius: 15,
+                                  backgroundColor: Colors.white,
+                                  child: Icon(
+                                    Icons.delete_forever,
+                                    size: 25,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        );
                     }),
           ],
         ),
@@ -119,6 +159,7 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
       _businessName = 'Prestar Pvt. Ltd';
       _businessCategories = ['Corporate', 'Clubs', 'E-Commerce'];
       _businessLogos = [
+        'assets/images/uploadPhoto.png',
         'https://logo.clearbit.com/facebook.com',
         'https://logo.clearbit.com/google.com',
         'https://logo.clearbit.com/att.com',
@@ -131,12 +172,36 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
     });
   }
 
-  int _gridCrossAxisCount() {
-    if (_businessLogos.length == 1)
-      return 1;
-    else if (_businessLogos.length == 2)
-      return 1;
-    else
-      return 4;
+  Future<void> _pickImageFromGallery() async {
+    var status = await Permission.camera.status;
+    if (await Permission.camera.request().isGranted) {
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        setState(() => this._imageFile = File(pickedFile.path));
+        //TODO upload image to server
+        var newLogo = await uploadPic(imagefile: _imageFile!);
+        print('upload done');
+        print(newLogo.toString());
+        setState(() {
+          _businessLogos.add(newLogo.toString());
+        });
+      }
+    }
+  }
+
+  Future<String> uploadPic({required File imagefile}) async {
+    //Create a reference to the location you want to upload to in firebase
+    Reference ref = _storage.ref().child("abcd/");
+
+    //Upload the file to firebase
+    UploadTask uploadTask = ref.putFile(imagefile);
+
+    // Waits till the file is uploaded then stores the download url
+    String location = await uploadTask.snapshot.ref.getDownloadURL();
+
+    //returns the download url
+    print("download url received");
+    print("location");
+    return location;
   }
 }
