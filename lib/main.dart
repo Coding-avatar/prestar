@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:prestar/services/auth.dart';
 import 'package:prestar/views/screens/HomeScreen.dart';
 import 'package:prestar/views/screens/LoginScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -104,14 +109,16 @@ class _RedirectUserState extends State<RedirectUser> {
         print('User is currently signed out!');
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => LoginScreen(),
+            builder: (context) => LoginScreen(
+              auth: Auth(),
+            ),
           ),
         );
       } else {
         print('User is signed in!');
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => LoginScreen(),
+            builder: (context) => HomeScreen(),
           ),
         );
       }
@@ -120,6 +127,13 @@ class _RedirectUserState extends State<RedirectUser> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: Image.asset(
+        "assets/images/splashScreen.png",
+        fit: BoxFit.contain,
+      ),
+    );
   }
 }
