@@ -160,33 +160,26 @@ class _RegisterOtpScreenState extends State<RegisterOtpScreen> {
     await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: '+91 $userMobileNumber',
         verificationCompleted: (PhoneAuthCredential credential) async {
-          print('verification Completed block');
           await FirebaseAuth.instance.signInWithCredential(credential);
         },
         verificationFailed: (FirebaseAuthException e) {
-          print('verification Failed');
           // handle error here
         },
         codeSent: (String verificationId, int? resendToken) {
-          print('Code Sent');
           setState(() {
             codeSent = true;
             verId = verificationId;
-            print('1. Verification id $verId');
           });
         },
         codeAutoRetrievalTimeout: (String verificationId) {
-          print('Code Auto retrival');
           setState(() {
             verId = verificationId;
-            print('2. Verification id $verId');
           });
         },
         timeout: Duration(seconds: 60));
   }
 
   void verifyOTP(String pin) async {
-    print('Called verify method with pin $pin');
     PhoneAuthCredential credential =
         PhoneAuthProvider.credential(verificationId: verId, smsCode: pin);
     try {
