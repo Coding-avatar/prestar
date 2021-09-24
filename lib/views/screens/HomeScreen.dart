@@ -1,4 +1,5 @@
 import 'package:better_player/better_player.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prestar/models/imagePostInfo.dart';
@@ -9,6 +10,7 @@ import 'package:prestar/views/widgets/imagePost.dart';
 import 'package:prestar/views/screens/GoLiveDescriptionScreen.dart';
 import 'package:prestar/views/screens/PostScreen.dart';
 import 'package:prestar/views/screens/VideoPostScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -19,23 +21,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<ImagePostInfo> _postData = List.empty(growable: true);
-  List bannerImages = [
-    'https://images.pexels.com/photos/9247345/pexels-photo-9247345.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
-    'https://images.pexels.com/photos/9245166/pexels-photo-9245166.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
-    'https://images.pexels.com/photos/9245170/pexels-photo-9245170.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
-    'https://images.pexels.com/photos/9226518/pexels-photo-9226518.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
-    'https://images.pexels.com/photos/9443587/pexels-photo-9443587.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
-    'https://images.pexels.com/photos/9351592/pexels-photo-9351592.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
-    'https://images.pexels.com/photos/9329355/pexels-photo-9329355.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
-    'https://images.pexels.com/photos/9321606/pexels-photo-9321606.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
-    'https://images.pexels.com/photos/7365263/pexels-photo-7365263.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
-    'https://images.pexels.com/photos/9320447/pexels-photo-9320447.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
-    'https://images.pexels.com/photos/9297975/pexels-photo-9297975.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
-    'https://images.pexels.com/photos/9303791/pexels-photo-9303791.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
-    'https://images.pexels.com/photos/9250013/pexels-photo-9250013.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
-    'https://images.pexels.com/photos/9266627/pexels-photo-9266627.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
-    'https://images.pexels.com/photos/9229072/pexels-photo-9229072.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
-  ];
+  List bannerImages = List.empty(growable: true);
 
   List bannerVideos = [
     {
@@ -73,6 +59,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     fillData();
+    print("InitState");
+    fetchBannerList();
   }
 
   @override
@@ -125,36 +113,6 @@ class _HomeScreenState extends State<HomeScreen> {
               physics: AlwaysScrollableScrollPhysics(),
               child: Column(
                 children: [
-                  // Container(
-                  //   height: 55,
-                  //   decoration: BoxDecoration(
-                  //     gradient: LinearGradient(
-                  //         colors: [Color(0xff153c8d), Color(0xff0d2454)],
-                  //         begin: Alignment.topCenter,
-                  //         end: Alignment.bottomCenter),
-                  //   ),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //     children: [
-                  //       Padding(
-                  //         padding: const EdgeInsets.only(left: 10),
-                  //         child: Image.asset(
-                  //           "assets/logo/prestarold.png",
-                  //           height: 70,
-                  //           color: Colors.white,
-                  //           width: screenWidth / 3,
-                  //         ),
-                  //       ),
-                  //       IconButton(
-                  //         onPressed: null,
-                  //         icon: ImageIcon(
-                  //           AssetImage("assets/icons/bell.png"),
-                  //           color: Colors.white,
-                  //         ),
-                  //       )
-                  //     ],
-                  //   ),
-                  // ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 10),
@@ -284,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     BetterPlayerConfiguration(
                                   placeholder: Image.network(
                                       bannerVideos[itemIndex]['thumbnail']),
-                                  autoPlay: false,
+                                  autoPlay: true,
                                   controlsConfiguration:
                                       BetterPlayerControlsConfiguration(
                                           enableMute: true),
@@ -444,4 +402,23 @@ class _HomeScreenState extends State<HomeScreen> {
             })) ??
         false;
   }
+
+  Future<void> fetchBannerList() async {
+    var result =
+        await FirebaseStorage.instance.ref().child("/banner_images").listAll();
+    result.items.forEach((element) async {
+      String imageUrl = await element.getDownloadURL();
+      setState(() {
+        bannerImages.add(imageUrl);
+      });
+    });
+  }
+  // void fetchBannerList() async {
+  //   print("fetching banner list");
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     bannerImages = prefs.getStringList("banner")!;
+  //   });
+  //   print(prefs.getStringList("banner"));
+  // }
 }
