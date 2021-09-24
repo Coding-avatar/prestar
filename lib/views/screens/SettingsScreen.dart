@@ -10,18 +10,25 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-  TextEditingController userPasswordFieldController =
+  TextEditingController _textFieldController = new TextEditingController();
+  TextEditingController _userPasswordFieldController =
       new TextEditingController();
-  TextEditingController confirmPasswordFieldController =
+  TextEditingController _confirmPasswordFieldController =
       new TextEditingController();
-  TextEditingController userEmailFieldController = new TextEditingController();
-  TextEditingController userMobileNumberFieldController =
-      new TextEditingController();
+  FocusNode _confirmPasswordFocusNode = new FocusNode();
+  late String userEmail;
+  late String userPhone;
 
+  bool _isNewPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
+  bool _isNewPasswordValid = true;
+  bool _isConfirmPasswordValid = true;
+  String errorText = "Password cannot be empty";
+  String errorText2 = "Password don\'t match";
   @override
   void initState() {
     super.initState();
-    updateDetails();
+    updateSettingsDetails();
   }
 
   @override
@@ -76,71 +83,135 @@ class _SettingScreenState extends State<SettingScreen> {
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Text('Change Password'),
+              margin: EdgeInsets.only(top: 15),
+              child: Text(
+                'Change Password',
+                style: TextStyle(color: Colors.black38, fontSize: 14),
+              ),
               width: double.infinity,
             ),
             TextField(
-              controller: userPasswordFieldController,
+              controller: _userPasswordFieldController,
               decoration: InputDecoration(
                 hintText: 'New Password',
-                hintStyle: TextStyle(),
+                hintStyle: TextStyle(color: Colors.black54, fontSize: 14),
+                errorText: _isNewPasswordValid ? null : errorText,
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.visibility_off),
-                  onPressed: null,
+                  icon: _isNewPasswordVisible
+                      ? Icon(Icons.visibility)
+                      : Icon(Icons.visibility_off),
+                  onPressed: () {
+                    setState(() {
+                      _isNewPasswordVisible = !_isNewPasswordVisible;
+                    });
+                  },
                 ),
               ),
-              obscureText: true,
+              obscureText: !_isNewPasswordVisible,
+              onChanged: (value) {
+                setState(() {
+                  _isNewPasswordValid = true;
+                });
+              },
+              onEditingComplete: () {
+                if (_userPasswordFieldController.text.trim() == "") {
+                  setState(() {
+                    _isNewPasswordValid = false;
+                  });
+                } else {
+                  _confirmPasswordFocusNode.requestFocus();
+                }
+              },
             ),
             TextField(
-              controller: confirmPasswordFieldController,
+              controller: _confirmPasswordFieldController,
+              focusNode: _confirmPasswordFocusNode,
               decoration: InputDecoration(
-                  hintText: 'Confirm Password',
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.visibility_off),
-                    onPressed: null,
+                hintText: 'Confirm Password',
+                hintStyle: TextStyle(color: Colors.black54, fontSize: 14),
+                errorText: _isConfirmPasswordValid ? null : errorText2,
+                suffixIcon: IconButton(
+                  icon: _isConfirmPasswordVisible
+                      ? Icon(Icons.visibility)
+                      : Icon(Icons.visibility_off),
+                  onPressed: () {
+                    setState(() {
+                      _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                    });
+                  },
+                ),
+              ),
+              obscureText: !_isConfirmPasswordVisible,
+              onChanged: (value) {
+                setState(() {
+                  _isNewPasswordValid = true;
+                });
+              },
+              onEditingComplete: () {
+                _confirmPasswordFocusNode.unfocus();
+
+                ///validate confirm password
+              },
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 5),
+              child: Text(
+                'Phone No.',
+                style: TextStyle(color: Colors.black38, fontSize: 14),
+              ),
+              width: double.infinity,
+            ),
+            Container(
+              width: double.infinity,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        userPhone,
+                        style: TextStyle(color: Colors.black87, fontSize: 18),
+                      ),
+                      InkWell(
+                        child: Icon(Icons.edit),
+                        onTap: () => updateUserPhone(),
+                      )
+                    ],
                   ),
-                  alignLabelWithHint: false),
-              obscureText: true,
+                  Divider()
+                ],
+              ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Text('Change Email'),
-              width: double.infinity,
-            ),
-            TextField(
-              controller: userEmailFieldController,
-              decoration: InputDecoration(
-                hintText: 'Email Address',
-                hintStyle: TextStyle(),
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: null,
-                ),
+              margin: EdgeInsets.symmetric(vertical: 5),
+              child: Text(
+                'Email Address',
+                style: TextStyle(color: Colors.black38, fontSize: 14),
               ),
-              enabled: false,
+              width: double.infinity,
             ),
             Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Text('Change Phone No.'),
               width: double.infinity,
-            ),
-            TextField(
-              controller: userMobileNumberFieldController,
-              decoration: InputDecoration(
-                hintText: 'Phone No.',
-                hintStyle: TextStyle(),
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: null,
-                ),
-                // labelStyle: TextStyle(color: Colors.black54, fontSize: 12),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        userEmail,
+                        style: TextStyle(color: Colors.black87, fontSize: 18),
+                      ),
+                      InkWell(
+                        child: Icon(Icons.edit),
+                        onTap: () => updateUserEmail(),
+                      )
+                    ],
+                  ),
+                  Divider()
+                ],
               ),
-              enabled: true,
             ),
-            Expanded(
-              child: Container(),
-            ),
+            SizedBox(height: 30),
             ElevatedButton(
               onPressed: null,
               child: Text('Save Settings'),
@@ -154,10 +225,68 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
-  void updateDetails() {
+  void updateSettingsDetails() {
     setState(() {
-      userEmailFieldController.text = "rimadutta1234@gmail.com";
-      userMobileNumberFieldController.text = "1234567890";
+      userEmail = "rimadutta1234@gmail.com";
+      userPhone = "7872540396";
     });
+  }
+
+  updateUserPhone() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return new AlertDialog(
+            title: Text("Edit "),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Update "),
+                TextField(
+                  controller: _textFieldController,
+                )
+              ],
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text("Cancel"),
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                child: Text("Okay"),
+              )
+            ],
+          );
+        });
+  }
+
+  updateUserEmail() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return new AlertDialog(
+            title: Text("Edit "),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Update "),
+                TextField(
+                  controller: _textFieldController,
+                )
+              ],
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text("Cancel"),
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                child: Text("Okay"),
+              )
+            ],
+          );
+        });
   }
 }
