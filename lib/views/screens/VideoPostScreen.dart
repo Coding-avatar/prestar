@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prestar/views/screens/PostScreen.dart';
-import 'package:prestar/views/widgets/videoPost.dart';
-
+import 'package:prestar/views/custom_widgets/videoPost.dart';
 import 'GoLiveDescriptionScreen.dart';
-import 'HomeScreen.dart';
 import 'NotificationScreen.dart';
 import 'ProfileScreen.dart';
 

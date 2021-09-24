@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prestar/services/auth.dart';
 import 'package:prestar/views/screens/LoginScreen.dart';
 import 'package:prestar/views/screens/RegisterOtpScreen.dart';
 
@@ -382,4 +383,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
+
+  void submit() {}
 }

@@ -2,9 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:prestar/services/auth_provider.dart';
 import 'package:prestar/views/screens/SettingsScreen.dart';
 import 'package:prestar/views/screens/editProfileScreen.dart';
-import 'package:prestar/views/widgets/videoPost.dart';
+import 'package:prestar/views/custom_widgets/videoPost.dart';
 import 'GoLiveDescriptionScreen.dart';
 import 'NotificationScreen.dart';
 import 'PostScreen.dart';
@@ -279,6 +280,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                               InkWell(
+                                onTap: _signOut,
                                 child: Container(
                                   width: screenWidth / 4,
                                   alignment: Alignment.center,
@@ -1058,5 +1060,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     ];
+  }
+
+  void _signOut() {
+    final auth = AuthProvider.of(context);
+    try {
+      auth.signOut();
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

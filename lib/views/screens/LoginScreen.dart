@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:prestar/services/auth.dart';
+import 'package:prestar/services/auth_provider.dart';
 import 'package:prestar/views/screens/HomeScreen.dart';
 import 'package:prestar/views/screens/RecoverPasswordScreen.dart';
 import 'package:prestar/views/screens/RegisterOtpScreen.dart';
@@ -10,26 +11,11 @@ import 'package:prestar/views/screens/RegisterScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key, required this.auth}) : super(key: key);
-  final AuthBase auth;
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // static Widget create(BuildContext context) {
-  //   return Provider<SignInBloc>(
-  //     create: (_) => SignInBloc(),
-  //     child: LoginScreen(),
-  //   );
-  // }
-
-  void _signInAnonymously() async {
-    final userCredential = await FirebaseAuth.instance.signInAnonymously();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("UserId", userCredential.user!.uid);
-  }
-
   TextEditingController mobileNumberFieldController =
       new TextEditingController();
 
@@ -56,6 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = AuthProvider.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SafeArea(
@@ -133,7 +120,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         ]),
                     child: ElevatedButton(
                       onPressed: () {
-                        _signInAnonymously();
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (context) => HomeScreen(),
@@ -321,7 +307,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _signInWithGoogle() async {
     try {
-      await widget.auth.signInWithGoogle();
+      final auth = AuthProvider.of(context);
+      await auth.signInWithGoogle();
     } catch (e) {
       print(e.toString());
     }

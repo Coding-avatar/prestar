@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prestar/views/widgets/NotificationTile.dart';
+import 'package:prestar/views/custom_widgets/NotificationTile.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({Key? key}) : super(key: key);
