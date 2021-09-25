@@ -3,14 +3,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prestar/models/imagePostInfo.dart';
-import 'package:prestar/views/screens/NotificationScreen.dart';
+import 'package:prestar/views/common_screens/NotificationScreen.dart';
 import 'package:prestar/views/screens/ProfileScreen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:prestar/views/custom_widgets/imagePost.dart';
-import 'package:prestar/views/screens/GoLiveDescriptionScreen.dart';
-import 'package:prestar/views/screens/PostScreen.dart';
-import 'package:prestar/views/screens/VideoPostScreen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:prestar/views/screens/GoLive/GoLiveDescriptionScreen.dart';
+import 'package:prestar/views/screens/CreatePost/PostScreen.dart';
+import 'package:prestar/views/screens/Videos/VideoPostScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -382,8 +381,8 @@ class _HomeScreenState extends State<HomeScreen> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: Text('Are you sure?'),
-                content: Text('Do you want to exit an App'),
+                title: Text('Confirm Exit?'),
+                content: Text('Are you sure you want to exit?'),
                 actions: <Widget>[
                   TextButton(
                     child: Text('No'),

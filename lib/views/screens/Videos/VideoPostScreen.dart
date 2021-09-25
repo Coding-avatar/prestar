@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:prestar/views/screens/PostScreen.dart';
+import 'package:prestar/views/screens/CreatePost/PostScreen.dart';
 import 'package:prestar/views/custom_widgets/videoPost.dart';
-import 'GoLiveDescriptionScreen.dart';
-import 'NotificationScreen.dart';
-import 'ProfileScreen.dart';
+import '../GoLive/GoLiveDescriptionScreen.dart';
+import '../../common_screens/NotificationScreen.dart';
+import '../ProfileScreen.dart';
 
 class VideoPostScreen extends StatefulWidget {
   const VideoPostScreen({Key? key}) : super(key: key);

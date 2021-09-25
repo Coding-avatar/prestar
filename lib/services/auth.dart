@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 abstract class AuthBase {
@@ -19,6 +21,8 @@ abstract class AuthBase {
 
 class Auth implements AuthBase {
   final _firebaseAuth = FirebaseAuth.instance;
+  final CollectionReference userReference =
+      FirebaseFirestore.instance.collection('users');
 
   @override
   User? get currentUser => FirebaseAuth.instance.currentUser;
@@ -60,6 +64,13 @@ class Auth implements AuthBase {
           GoogleAuthProvider.credential(
               idToken: googleAuth.idToken, accessToken: googleAuth.accessToken),
         );
+        createUserInDataBase(
+            uid: userCredential.user!.uid,
+            name: userCredential.user!.displayName ?? '',
+            dob: DateTime(2008),
+            gender: '',
+            email: userCredential.user!.email ?? '',
+            phone: userCredential.user!.phoneNumber ?? '');
         return userCredential.user;
       } else {
         throw FirebaseAuthException(
@@ -94,5 +105,22 @@ class Auth implements AuthBase {
     final googleSignIn = GoogleSignIn();
     await googleSignIn.signOut();
     await _firebaseAuth.signOut();
+  }
+
+  Future<void> createUserInDataBase({
+    required String uid,
+    required String name,
+    required DateTime dob,
+    required String gender,
+    required String email,
+    required String phone,
+  }) async {
+    await userReference.doc(uid).set({
+      'name': name,
+      'dob': dob,
+      'gender': gender,
+      'email': email,
+      'phone': phone,
+    });
   }
 }

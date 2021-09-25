@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:prestar/views/screens/HomeScreen.dart';
+import 'package:prestar/views/screens/Home/HomeScreen.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({Key? key}) : super(key: key);

@@ -2,13 +2,13 @@ import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:prestar/views/screens/GoLiveDescriptionScreen.dart';
-import 'package:prestar/views/screens/VideoPostScreen.dart';
+import 'package:prestar/views/screens/GoLive/GoLiveDescriptionScreen.dart';
+import 'package:prestar/views/screens/Videos/VideoPostScreen.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:prestar/views/screens/ProfileScreen.dart';
 
-import 'NotificationScreen.dart';
+import '../../common_screens/NotificationScreen.dart';
 
 class CreatePostScreen extends StatefulWidget {
   const CreatePostScreen({Key? key}) : super(key: key);
@@ -245,7 +245,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         setState(() => this._imageFile = File(pickedFile.path));
       }
     } else {
-      print('premission not granted');
+      print('permission not granted');
     }
   }
 }

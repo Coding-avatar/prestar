@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:prestar/views/screens/CommentsScreen.dart';
-import 'package:prestar/views/screens/LikesScreen.dart';
+import 'package:prestar/views/common_screens/CommentsScreen.dart';
+import 'package:prestar/views/common_screens/LikesScreen.dart';
 
 class ImagePost extends StatefulWidget {
   final String userName;

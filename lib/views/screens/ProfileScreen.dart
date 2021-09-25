@@ -6,10 +6,10 @@ import 'package:prestar/services/auth_provider.dart';
 import 'package:prestar/views/screens/SettingsScreen.dart';
 import 'package:prestar/views/screens/editProfileScreen.dart';
 import 'package:prestar/views/custom_widgets/videoPost.dart';
-import 'GoLiveDescriptionScreen.dart';
-import 'NotificationScreen.dart';
-import 'PostScreen.dart';
-import 'VideoPostScreen.dart';
+import 'GoLive/GoLiveDescriptionScreen.dart';
+import '../common_screens/NotificationScreen.dart';
+import 'CreatePost/PostScreen.dart';
+import 'Videos/VideoPostScreen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);

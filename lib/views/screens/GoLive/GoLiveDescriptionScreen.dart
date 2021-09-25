@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:prestar/views/screens/PostScreen.dart';
+import 'package:prestar/views/screens/CreatePost/PostScreen.dart';
 import 'package:prestar/views/custom_widgets/CustomGenderRadioButton.dart';
 import 'package:prestar/views/custom_widgets/CustomLogoRadioButton.dart';
-import 'NotificationScreen.dart';
-import 'ProfileScreen.dart';
-import 'VideoPostScreen.dart';
+import '../../common_screens/NotificationScreen.dart';
+import '../ProfileScreen.dart';
+import '../Videos/VideoPostScreen.dart';
 
 class GoLiveDescriptionScreen extends StatefulWidget {
   const GoLiveDescriptionScreen({Key? key}) : super(key: key);

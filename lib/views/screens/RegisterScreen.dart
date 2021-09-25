@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:prestar/services/auth.dart';
-import 'package:prestar/views/screens/LoginScreen.dart';
+import 'package:prestar/views/screens/Login/LoginScreen.dart';
 import 'package:prestar/views/screens/RegisterOtpScreen.dart';
 
-import 'package:prestar/views/screens/HomeScreen.dart';
+import 'package:prestar/views/screens/Home/HomeScreen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);

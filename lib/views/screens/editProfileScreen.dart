@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:prestar/views/screens/businessProfileScreen.dart';
 import 'package:prestar/views/screens/myProfileScreen.dart';
 
-import 'NotificationScreen.dart';
+import '../common_screens/NotificationScreen.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
