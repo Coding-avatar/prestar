@@ -12,18 +12,20 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController mobileNumberFieldController =
-      new TextEditingController();
-  TextEditingController password
+  TextEditingController userIdFieldController = new TextEditingController();
+  TextEditingController passwordFieldController = new TextEditingController();
 
-  FocusNode mobileNumberFocusNode = new FocusNode();
+  FocusNode userIdFocusNode = new FocusNode();
+  FocusNode passwordFieldFocusNode = new FocusNode();
 
-  bool _isPhoneNumberValid = true;
+  bool _isPhoneNumberValid = false;
   String errorText = "Please Enter a valid phone number";
+  bool _isPasswordVisible = false;
 
   @override
   void initState() {
     super.initState();
+    //method to hide keyboard on startup
     Future.delayed(
       Duration(),
       () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
@@ -33,20 +35,22 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void dispose() {
     super.dispose();
-    mobileNumberFieldController.dispose();
-    mobileNumberFocusNode.dispose();
+    userIdFieldController.dispose();
+    userIdFocusNode.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final double _screenWidth = MediaQuery.of(context).size.width;
+    final double _screenHeight = MediaQuery.of(context).size.height;
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         body: SafeArea(
           child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
+            width: _screenWidth,
+            height: _screenHeight,
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(),
@@ -54,20 +58,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: 40,
+                    height: 20,
                   ),
-                  CircleAvatar(
-                    child: Image.asset(
-                      "assets/logo/prestar_small_logo.png",
-                      width: 70,
-                      height: 70,
-                      color: Colors.white,
-                    ),
-                    radius: 50,
-                    backgroundColor: Color(0xff092497),
+                  Image.asset(
+                    "assets/logo/prestarold.png",
+                    width: _screenWidth * .5,
+                    // height: 70,
                   ),
                   SizedBox(
-                    height: 40,
+                    height: 80,
                   ),
                   Container(
                     child: Text(
@@ -77,9 +76,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: double.infinity,
                   ),
                   TextField(
-                    keyboardType: TextInputType.phone,
-                    controller: mobileNumberFieldController,
-                    focusNode: mobileNumberFocusNode,
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.done,
+                    controller: userIdFieldController,
+                    focusNode: userIdFocusNode,
+                    autocorrect: false,
                     autofocus: true,
                     onChanged: (value) {
                       setState(() {
@@ -94,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.phone_android_outlined),
-                      hintText: 'Enter your mobile number',
+                      hintText: 'Enter your email id or mobile number',
                       hintStyle: TextStyle(color: Colors.black54, fontSize: 16),
                       errorText: _isPhoneNumberValid ? null : errorText,
                     ),
@@ -102,30 +103,44 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(
                     height: 10,
                   ),
+                  Container(
+                    child: Text(
+                      'Password',
+                      style: TextStyle(color: Colors.grey, fontSize: 12),
+                    ),
+                    width: double.infinity,
+                  ),
                   TextField(
-                    keyboardType: TextInputType.phone,
-                    controller: mobileNumberFieldController,
-                    focusNode: mobileNumberFocusNode,
-                    autofocus: true,
+                    keyboardType: TextInputType.visiblePassword,
+                    textInputAction: TextInputAction.go,
+                    controller: passwordFieldController,
+                    focusNode: passwordFieldFocusNode,
+                    autofocus: false,
+                    autocorrect: false,
                     onChanged: (value) {
-                      setState(() {
-                        _isPhoneNumberValid = true;
-                      });
+                      print(value);
                     },
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(10),
-                      FilteringTextInputFormatter.allow(
-                        RegExp(r'^[0-9]*'),
-                      ),
-                    ],
+                    obscureText: !_isPasswordVisible,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.phone_android_outlined),
-                      hintText: 'Enter your mobile number',
+                      prefixIcon: Icon(Icons.lock_outline_rounded),
+                      suffixIcon: IconButton(
+                        icon: _isPasswordVisible
+                            ? Icon(Icons.visibility_off)
+                            : Icon(Icons.visibility),
+                        onPressed: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                      ),
+                      hintText: 'Enter your password',
                       hintStyle: TextStyle(color: Colors.black54, fontSize: 16),
-                      errorText: _isPhoneNumberValid ? null : errorText,
+                      errorText: null,
                     ),
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   SizedBox(
                     child: DecoratedBox(
                       decoration: BoxDecoration(
@@ -136,19 +151,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.circular(25),
                           boxShadow: [
                             BoxShadow(
-                                color: Color(0xff000000),
-                                blurRadius: 5.0,
-                                offset: Offset(1, 3)),
+                              color: Color(0xff000000),
+                              blurRadius: 5.0,
+                              offset: Offset(1, 3),
+                            ),
                           ]),
                       child: ElevatedButton(
                         onPressed: () {
+                          /// Add method to find user email and login with email and password
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder: (context) => HomeScreen(),
                             ),
                           );
                         },
-                        // onPressed: () => signInWithPhoneNumber(),
                         style: ElevatedButton.styleFrom(
                           primary: Colors.transparent,
                           shape: RoundedRectangleBorder(
@@ -259,11 +275,57 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(
                     height: 55,
                     child: ElevatedButton(
-                      onPressed: () => Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => HomeScreen(),
-                        ),
-                      ),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                content: Container(
+                                  height: _screenWidth * .5,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        'Sign Up with Facebook',
+                                        style: TextStyle(
+                                            color: Colors.indigo, fontSize: 22),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                          color: Colors.indigo,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Image.asset(
+                                          "assets/icons/facebook.png",
+                                          fit: BoxFit.fill,
+                                          height: 50,
+                                          width: 50,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        'Coming Soon',
+                                        style: TextStyle(
+                                            color: Colors.indigoAccent,
+                                            fontSize: 20),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            });
+                      },
                       style: ButtonStyle(
                         backgroundColor:
                             MaterialStateProperty.all(Colors.blueAccent),
