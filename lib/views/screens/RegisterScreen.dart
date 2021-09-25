@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prestar/services/auth.dart';
+import 'package:prestar/services/auth_provider.dart';
 import 'package:prestar/views/screens/Login/LoginScreen.dart';
 import 'package:prestar/views/screens/RegisterOtpScreen.dart';
 
@@ -63,13 +63,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
+    final double _screenWidth = MediaQuery.of(context).size.width;
+    final double _screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SafeArea(
         child: Container(
-          width: screenWidth,
-          height: screenHeight,
+          width: _screenWidth,
+          height: _screenHeight,
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
@@ -216,7 +216,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       .map(
                         (item) => DropdownMenuItem(
                           child: Container(
-                            width: screenWidth - 64,
+                            width: _screenWidth - 64,
                             child: Row(
                               children: [
                                 Icon(Icons.male, color: Colors.black54),
@@ -284,11 +284,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Container(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: () => Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => LoginScreen(),
-                      ),
-                    ),
+                    onPressed: () => Navigator.of(context).pop(),
                     child: Text(
                       'Login',
                       style: TextStyle(fontWeight: FontWeight.w500),
@@ -298,11 +294,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(
                   height: 55,
                   child: ElevatedButton(
-                    onPressed: () => Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => HomeScreen(),
-                      ),
-                    ),
+                    onPressed: () => _signInWithGoogle(),
                     style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(Colors.redAccent),
@@ -340,11 +332,56 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(
                   height: 55,
                   child: ElevatedButton(
-                    onPressed: () => Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => HomeScreen(),
-                      ),
-                    ),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              content: Container(
+                                height: _screenWidth * .5,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Sign Up with Facebook',
+                                      style: TextStyle(
+                                          color: Colors.indigo, fontSize: 22),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        color: Colors.indigo,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Image.asset(
+                                        "assets/icons/facebook.png",
+                                        fit: BoxFit.fill,
+                                        height: 50,
+                                        width: 50,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      'Coming Soon',
+                                      style: TextStyle(
+                                          color: Colors.indigoAccent,
+                                          fontSize: 20),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          });
+                    },
                     style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(Colors.blueAccent),
@@ -382,6 +419,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _signInWithGoogle() async {
+    try {
+      final auth = AuthProvider.of(context);
+      await auth.signInWithGoogle();
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   void submit() {}
