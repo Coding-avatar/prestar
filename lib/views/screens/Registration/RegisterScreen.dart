@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prestar/services/auth_provider.dart';
 import 'package:prestar/views/screens/Login/LoginScreen.dart';
-import 'package:prestar/views/screens/RegisterOtpScreen.dart';
+import 'package:prestar/views/screens/Registration/RegisterOtpScreen.dart';
 
 import 'package:prestar/views/screens/Home/HomeScreen.dart';
 
@@ -13,6 +13,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  bool _isFormEnabled = true;
   TextEditingController emailFieldController = new TextEditingController();
   TextEditingController nameFieldController = new TextEditingController();
   TextEditingController mobileNumberFieldController =
@@ -26,6 +27,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   FocusNode passwordFocusNode = new FocusNode();
   FocusNode birthdayFocusNode = new FocusNode();
 
+  String emailErrorText = "Please enter a valid email";
+  String nameErrorText = "Name cannot be empty";
+  String mobileNumberErrorText = "Please enter a valid mobile number";
+  String passwordErrorText = "Password must be of minimum 6 characters";
+  String birthdayErrorText = "Enter a valid Date of Birth";
+
   late DateTime _selectedDate;
 
   @override
@@ -35,6 +42,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _selectedDate = DateTime.now();
       birthdayFieldController.text = _selectedDate.toString();
     });
+  }
+
+  void dispose() {
+    super.dispose();
+    emailFieldController.dispose();
+    nameFieldController.dispose();
+    mobileNumberFieldController.dispose();
+    passwordFieldController.dispose();
+    birthdayFieldController.dispose();
+
+    emailFocusNode.dispose();
+    nameFocusNode.dispose();
+    mobileNumberFocusNode.dispose();
+    passwordFocusNode.dispose();
+    birthdayFocusNode.dispose();
   }
 
   //Method for showing the date picker
@@ -56,6 +78,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       setState(() {
         //for rebuilding the ui
         _selectedDate = pickedDate;
+
+        ///format date for right use
         birthdayFieldController.text = _selectedDate.toString();
       });
     });
