@@ -3,7 +3,7 @@ import 'package:prestar/views/screens/CreatePost/PostScreen.dart';
 import 'package:prestar/views/custom_widgets/videoPost.dart';
 import '../GoLive/GoLiveDescriptionScreen.dart';
 import '../../common_screens/NotificationScreen.dart';
-import '../ProfileScreen.dart';
+import '../Profile/ProfileScreen.dart';
 
 class VideoPostScreen extends StatefulWidget {
   const VideoPostScreen({Key? key}) : super(key: key);

@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "280242733084",
-    "project_id": "prestar-a5e69",
-    "storage_bucket": "prestar-a5e69.appspot.com"
+    "project_number": "292835868547",
+    "project_id": "prestar-81a26",
+    "storage_bucket": "prestar-81a26.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:280242733084:android:8415aa7b5adbc19e45dfd9",
+        "mobilesdk_app_id": "1:292835868547:android:845cf49ee9071fb2da00b6",
         "android_client_info": {
           "package_name": "com.mdnifesalilislam.prestar.prestar"
         }
       },
       "oauth_client": [
         {
-          "client_id": "280242733084-q4tqp0v35vi0vbs9a9a3esa7tbg25c52.apps.googleusercontent.com",
+          "client_id": "292835868547-q5u2fdjbbdr2q0hqk2e3nvk2qjb1f9l1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.mdnifesalilislam.prestar.prestar",
-            "certificate_hash": "033ce45947ade85189b0f7e052621e21669d0fcf"
+            "certificate_hash": "ae72b5460df9702af77794a3d294e014cb82199b"
           }
         },
         {
-          "client_id": "280242733084-1de7coblrj2ov63k4eb297nrs3mtnh48.apps.googleusercontent.com",
+          "client_id": "292835868547-o8ov1hlgk7h0mchlrpbm1f9qr9do652s.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCe3YkmeiBd3HrM9aa6bIPa3kv7SdjEdNw"
+          "current_key": "AIzaSyC6VEV7ZdAuxW-jHVwitD63XnClxx94qe0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "280242733084-1de7coblrj2ov63k4eb297nrs3mtnh48.apps.googleusercontent.com",
+              "client_id": "292835868547-o8ov1hlgk7h0mchlrpbm1f9qr9do652s.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

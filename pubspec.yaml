@@ -43,7 +43,8 @@ dependencies:
   firebase_storage: ^10.0.3
   provider: ^6.0.0
   sqflite: ^2.0.0+4
-
+  email_validator: ^2.0.1
+  http: ^0.13.3
 
 
 dev_dependencies:
