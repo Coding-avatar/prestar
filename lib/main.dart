@@ -1,14 +1,10 @@
-import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:prestar/services/auth.dart';
 import 'package:prestar/services/auth_provider.dart';
 import 'package:prestar/views/screens/Home/HomeScreen.dart';
 import 'package:prestar/views/screens/Login/LoginScreen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -122,21 +118,3 @@ class RedirectUser extends StatelessWidget {
     );
   }
 }
-
-//
-// if (user == null) {
-// print('User is currently signed out!');
-// Navigator.of(context).pushReplacement(
-// MaterialPageRoute(
-// builder: (context) => LoginScreen(),
-// ),
-// );
-// } else {
-// print('User is signed in!');
-// Navigator.of(context).pushReplacement(
-// MaterialPageRoute(
-// builder: (context) => HomeScreen(),
-// ),
-// );
-// }
-//

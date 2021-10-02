@@ -6,7 +6,7 @@ import 'package:prestar/views/screens/GoLive/GoLiveDescriptionScreen.dart';
 import 'package:prestar/views/screens/Videos/VideoPostScreen.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:prestar/views/screens/ProfileScreen.dart';
+import 'package:prestar/views/screens/Profile/ProfileScreen.dart';
 
 import '../../common_screens/NotificationScreen.dart';
 

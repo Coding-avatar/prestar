@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
-import 'ResetPasswordScreen.dart';
+import 'Registration/ResetPasswordScreen.dart';
 
 class PasswordResetScreen extends StatefulWidget {
   const PasswordResetScreen({Key? key}) : super(key: key);

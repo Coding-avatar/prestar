@@ -4,7 +4,7 @@ import 'package:prestar/views/screens/CreatePost/PostScreen.dart';
 import 'package:prestar/views/custom_widgets/CustomGenderRadioButton.dart';
 import 'package:prestar/views/custom_widgets/CustomLogoRadioButton.dart';
 import '../../common_screens/NotificationScreen.dart';
-import '../ProfileScreen.dart';
+import '../Profile/ProfileScreen.dart';
 import '../Videos/VideoPostScreen.dart';
 
 class GoLiveDescriptionScreen extends StatefulWidget {

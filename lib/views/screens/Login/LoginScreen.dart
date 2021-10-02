@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:prestar/services/auth_provider.dart';
-import 'package:prestar/views/screens/Home/HomeScreen.dart';
 import 'package:prestar/views/screens/RecoverPasswordScreen.dart';
-import 'package:prestar/views/screens/RegisterScreen.dart';
+import 'package:prestar/views/screens/Registration/RegisterScreen.dart';
+import 'package:email_validator/email_validator.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -12,31 +12,39 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController userIdFieldController = new TextEditingController();
+  bool _isFormDisabled = false;
+  TextEditingController emailFieldController = new TextEditingController();
   TextEditingController passwordFieldController = new TextEditingController();
 
-  FocusNode userIdFocusNode = new FocusNode();
-  FocusNode passwordFieldFocusNode = new FocusNode();
+  FocusNode emailFocusNode = new FocusNode();
+  FocusNode passwordFocusNode = new FocusNode();
 
-  bool _isPhoneNumberValid = false;
-  String errorText = "Please Enter a valid phone number";
+  bool _isEmailValid = true;
+  String emailErrorText = "Please Enter a valid email address";
+  String get email => emailFieldController.text.trim();
+
   bool _isPasswordVisible = false;
+  bool _isPasswordValid = true;
+  String get password => passwordFieldController.text;
+  String passwordErrorText = "Password must be of minimum 6 characters";
 
   @override
   void initState() {
     super.initState();
     //method to hide keyboard on startup
-    Future.delayed(
-      Duration(),
-      () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
-    );
+    // Future.delayed(
+    //   Duration(),
+    //   () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
+    // );
   }
 
   @override
   void dispose() {
     super.dispose();
-    userIdFieldController.dispose();
-    userIdFocusNode.dispose();
+    emailFieldController.dispose();
+    emailFocusNode.dispose();
+    passwordFieldController.dispose();
+    passwordFocusNode.dispose();
   }
 
   @override
@@ -70,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   Container(
                     child: Text(
-                      'Email / Mobile No.',
+                      'Email',
                       style: TextStyle(color: Colors.grey, fontSize: 12),
                     ),
                     width: double.infinity,
@@ -78,26 +86,29 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextField(
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.done,
-                    controller: userIdFieldController,
-                    focusNode: userIdFocusNode,
+                    controller: emailFieldController,
+                    focusNode: emailFocusNode,
                     autocorrect: false,
-                    autofocus: true,
+                    autofocus: false,
                     onChanged: (value) {
                       setState(() {
-                        _isPhoneNumberValid = true;
+                        _isEmailValid = true;
                       });
                     },
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(10),
-                      FilteringTextInputFormatter.allow(
-                        RegExp(r'^[0-9]*'),
-                      ),
-                    ],
+                    onEditingComplete: () {
+                      if (email.isNotEmpty && EmailValidator.validate(email)) {
+                        passwordFocusNode.requestFocus();
+                      } else {
+                        setState(() {
+                          _isEmailValid = false;
+                        });
+                      }
+                    },
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.phone_android_outlined),
-                      hintText: 'Enter your email id or mobile number',
+                      prefixIcon: Icon(Icons.email_outlined),
+                      hintText: 'Enter your email id',
                       hintStyle: TextStyle(color: Colors.black54, fontSize: 16),
-                      errorText: _isPhoneNumberValid ? null : errorText,
+                      errorText: _isEmailValid ? null : emailErrorText,
                     ),
                   ),
                   SizedBox(
@@ -114,11 +125,26 @@ class _LoginScreenState extends State<LoginScreen> {
                     keyboardType: TextInputType.visiblePassword,
                     textInputAction: TextInputAction.go,
                     controller: passwordFieldController,
-                    focusNode: passwordFieldFocusNode,
+                    focusNode: passwordFocusNode,
                     autofocus: false,
                     autocorrect: false,
                     onChanged: (value) {
-                      print(value);
+                      setState(() {
+                        _isPasswordValid = true;
+                      });
+                    },
+                    onEditingComplete: () {
+                      if (password.isNotEmpty && password.length >= 6) {
+                        passwordFocusNode.unfocus();
+                        setState(() {
+                          _isFormDisabled = true;
+                        });
+                        _signInWithEmailAndPassword(email, password);
+                      } else {
+                        setState(() {
+                          _isPasswordValid = false;
+                        });
+                      }
                     },
                     obscureText: !_isPasswordVisible,
                     decoration: InputDecoration(
@@ -135,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       hintText: 'Enter your password',
                       hintStyle: TextStyle(color: Colors.black54, fontSize: 16),
-                      errorText: null,
+                      errorText: _isPasswordValid ? null : passwordErrorText,
                     ),
                   ),
                   SizedBox(
@@ -157,14 +183,29 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ]),
                       child: ElevatedButton(
-                        onPressed: () {
-                          /// Add method to find user email and login with email and password
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) => HomeScreen(),
-                            ),
-                          );
-                        },
+                        onPressed: _isFormDisabled
+                            ? null
+                            : () {
+                                if (email.isNotEmpty &&
+                                    EmailValidator.validate(email) &&
+                                    password.length >= 6) {
+                                  setState(() {
+                                    _isFormDisabled = true;
+                                  });
+                                  _signInWithEmailAndPassword(email, password);
+                                  emailFieldController.text = "";
+                                  passwordFieldController.text = "";
+                                } else if (email.isNotEmpty ||
+                                    EmailValidator.validate(email)) {
+                                  setState(() {
+                                    _isEmailValid = false;
+                                  });
+                                } else {
+                                  setState(() {
+                                    _isPasswordValid = false;
+                                  });
+                                }
+                              },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.transparent,
                           shape: RoundedRectangleBorder(
@@ -235,7 +276,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(
                     height: 55,
                     child: ElevatedButton(
-                      onPressed: () => _signInWithGoogle(),
+                      onPressed: _isFormDisabled
+                          ? null
+                          : () {
+                              setState(() {
+                                _isFormDisabled = true;
+                              });
+                              _signInWithGoogle();
+                            },
                       style: ButtonStyle(
                         backgroundColor:
                             MaterialStateProperty.all(Colors.redAccent),
@@ -368,25 +416,19 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // signInWithPhoneNumber() async {
-  //   String phoneNumber = mobileNumberFieldController.text;
-  //   if (phoneNumber.length == 10 &&
-  //       (phoneNumber.startsWith('6') ||
-  //           phoneNumber.startsWith('7') ||
-  //           phoneNumber.startsWith('8') ||
-  //           phoneNumber.startsWith('9'))) {
-  //     print('Valid Mobile Number');
-  //     Navigator.of(context).push(MaterialPageRoute(
-  //         builder: (context) => RegisterOtpScreen(
-  //               userMobileNumber: phoneNumber,
-  //             )));
-  //   } else {
-  //     print('Invalid phone number');
-  //     setState(() {
-  //       _isPhoneNumberValid = false;
-  //     });
-  //   }
-  // }
+  Future<void> _signInWithEmailAndPassword(
+      String email, String password) async {
+    try {
+      final auth = AuthProvider.of(context);
+      await auth.signInWithEmailAndPassword(email, password);
+    } catch (e) {
+      print(e.toString());
+    } finally {
+      setState(() {
+        _isFormDisabled = false;
+      });
+    }
+  }
 
   Future<void> _signInWithGoogle() async {
     try {
@@ -394,6 +436,10 @@ class _LoginScreenState extends State<LoginScreen> {
       await auth.signInWithGoogle();
     } catch (e) {
       print(e.toString());
+    } finally {
+      setState(() {
+        _isFormDisabled = false;
+      });
     }
   }
 
