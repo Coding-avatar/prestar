@@ -1,14 +1,16 @@
 import 'package:better_player/better_player.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prestar/models/imagePostInfo.dart';
 import 'package:prestar/views/common_screens/NotificationScreen.dart';
-import 'package:prestar/views/screens/ProfileScreen.dart';
+import 'package:prestar/views/screens/Profile/ProfileScreen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:prestar/views/custom_widgets/imagePost.dart';
 import 'package:prestar/views/screens/GoLive/GoLiveDescriptionScreen.dart';
 import 'package:prestar/views/screens/CreatePost/PostScreen.dart';
+import 'package:prestar/views/screens/Profile/userFollowersScreen.dart';
 import 'package:prestar/views/screens/Videos/VideoPostScreen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -209,63 +211,70 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: Colors.black87,
                               fontWeight: FontWeight.w800),
                         ),
-                        Text(
-                          'View All',
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.blue,
-                              fontWeight: FontWeight.w800),
+                        InkWell(
+                          onTap: () =>
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => UserFollowersScreen(
+                                        uid: 'test',
+                                      ))),
+                          child: Text(
+                            'View All',
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.blue,
+                                fontWeight: FontWeight.w800),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  CarouselSlider.builder(
-                    itemCount: bannerVideos.length,
-                    itemBuilder: (BuildContext context, int itemIndex,
-                            int pageViewIndex) =>
-                        Container(
-                      child: Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
-                        child: Material(
-                          elevation: 10,
-                          shadowColor: Colors.black,
-                          borderRadius: BorderRadius.circular(25),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(25),
-                            child: AspectRatio(
-                              aspectRatio: 16 / 9,
-                              child: BetterPlayer.network(
-                                bannerVideos[itemIndex]['video'],
-                                betterPlayerConfiguration:
-                                    BetterPlayerConfiguration(
-                                  placeholder: Image.network(
-                                      bannerVideos[itemIndex]['thumbnail']),
-                                  autoPlay: true,
-                                  controlsConfiguration:
-                                      BetterPlayerControlsConfiguration(
-                                          enableMute: true),
-                                  aspectRatio: 16 / 9,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    options: CarouselOptions(
-                      viewportFraction: 1,
-                      initialPage: 0,
-                      enableInfiniteScroll: true,
-                      reverse: false,
-                      autoPlay: true,
-                      autoPlayInterval: Duration(seconds: 5),
-                      autoPlayAnimationDuration: Duration(milliseconds: 800),
-                      autoPlayCurve: Curves.fastOutSlowIn,
-                      // enlargeCenterPage: true,
-                      scrollDirection: Axis.horizontal,
-                    ),
-                  ),
+                  // CarouselSlider.builder(
+                  //   itemCount: bannerVideos.length,
+                  //   itemBuilder: (BuildContext context, int itemIndex,
+                  //           int pageViewIndex) =>
+                  //       Container(
+                  //     child: Container(
+                  //       width: double.infinity,
+                  //       padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
+                  //       child: Material(
+                  //         elevation: 10,
+                  //         shadowColor: Colors.black,
+                  //         borderRadius: BorderRadius.circular(25),
+                  //         child: ClipRRect(
+                  //           borderRadius: BorderRadius.circular(25),
+                  //           child: AspectRatio(
+                  //             aspectRatio: 16 / 9,
+                  //             child: BetterPlayer.network(
+                  //               bannerVideos[itemIndex]['video'],
+                  //               betterPlayerConfiguration:
+                  //                   BetterPlayerConfiguration(
+                  //                 placeholder: Image.network(
+                  //                     bannerVideos[itemIndex]['thumbnail']),
+                  //                 autoPlay: true,
+                  //                 controlsConfiguration:
+                  //                     BetterPlayerControlsConfiguration(
+                  //                         enableMute: true),
+                  //                 aspectRatio: 16 / 9,
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  //   options: CarouselOptions(
+                  //     viewportFraction: 1,
+                  //     initialPage: 0,
+                  //     enableInfiniteScroll: true,
+                  //     reverse: false,
+                  //     autoPlay: true,
+                  //     autoPlayInterval: Duration(seconds: 5),
+                  //     autoPlayAnimationDuration: Duration(milliseconds: 800),
+                  //     autoPlayCurve: Curves.fastOutSlowIn,
+                  //     // enlargeCenterPage: true,
+                  //     scrollDirection: Axis.horizontal,
+                  //   ),
+                  // ),
                   ListView.builder(
                     itemCount: _postData.length,
                     shrinkWrap: true,
@@ -403,14 +412,21 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> fetchBannerList() async {
-    var result =
-        await FirebaseStorage.instance.ref().child("/banner_images").listAll();
-    result.items.forEach((element) async {
-      String imageUrl = await element.getDownloadURL();
-      setState(() {
-        bannerImages.add(imageUrl);
+    try {
+      var result = await FirebaseFirestore.instance
+          .collection("/appData")
+          .doc('banners')
+          .get();
+      result.data()!.entries.forEach((element) {
+        setState(() {
+          bannerImages.add(element.value);
+        });
       });
-    });
+    } catch (e) {
+      print(e.toString());
+      // showAboutDialog(context: context)
+    }
+    // print(result.banner1);
   }
   // void fetchBannerList() async {
   //   print("fetching banner list");
