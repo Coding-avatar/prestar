@@ -5,6 +5,7 @@ import 'package:prestar/services/auth.dart';
 import 'package:prestar/services/auth_provider.dart';
 import 'package:prestar/views/screens/Home/HomeScreen.dart';
 import 'package:prestar/views/screens/Login/LoginScreen.dart';
+import 'package:prestar/views/screens/Profile/ProfileScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
