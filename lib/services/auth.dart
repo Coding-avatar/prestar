@@ -30,10 +30,14 @@ class Auth implements AuthBase {
   @override
   Stream<User?> authStateChanges() => _firebaseAuth.authStateChanges();
 
-  Future<void> storeMongoDbUserUid(String value) async {
-    print('Storing Mongo user uid $value');
+  Future<void> storeMongoDbUserDetails(
+      {required String uid,
+      required String name,
+      required String email}) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString(Constants.MongoDbUser, value);
+    sharedPreferences.setString(Constants.MongoDbUser, uid);
+    sharedPreferences.setString(Constants.MongoDbUserName, name);
+    sharedPreferences.setString(Constants.MongoDbUserEmail, email);
   }
 
   Future<void> storeFirebaseUserUid(String value) async {
@@ -70,7 +74,8 @@ class Auth implements AuthBase {
                 .then((res) {
               if (res.statusCode == 200) {
                 MongoUser newUser = MongoUser.fromJson(jsonDecode(res.body));
-                storeMongoDbUserUid(newUser.sId);
+                storeMongoDbUserDetails(
+                    name: newUser.name, uid: newUser.sId, email: newUser.email);
               } else {
                 ///handle error somehow
               }
