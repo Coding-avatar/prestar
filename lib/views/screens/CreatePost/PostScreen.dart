@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:prestar/constants/shared_preference_constants.dart';
+import 'package:prestar/services/HttpService.dart';
 import 'package:prestar/views/screens/GoLive/GoLiveDescriptionScreen.dart';
 import 'package:prestar/views/screens/Videos/VideoPostScreen.dart';
 import 'package:image_picker/image_picker.dart';
@@ -25,6 +26,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   File? _imageFile;
   final _picker = ImagePicker();
   final _storage = FirebaseStorage.instance;
+  TextEditingController titleController = new TextEditingController();
+  String get title => titleController.text;
   @override
   void initState() {
     super.initState();
@@ -128,6 +131,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               height: screenHeight / 3.5,
               padding: EdgeInsets.all(10),
               child: TextField(
+                controller: titleController,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: 'What\'s on your mind?',
@@ -144,6 +148,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   print('post created');
+                  uploadImage();
                 },
                 child: Text('Create Post'),
               ),
@@ -257,14 +262,24 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String userId =
         sharedPreferences.getString(Constants.FirebaseUserUid) ?? 'default';
+    String uid = sharedPreferences.getString(Constants.MongoDbUser) ?? '';
+    print(uid);
+    String name = sharedPreferences.getString(Constants.MongoDbUserName) ?? '';
+    print(name);
     if (_imageFile != null) {
-      var snapshot = _storage
+      Reference ref = _storage
           .ref()
-          .child("posts/$userId/${DateTime.now().millisecondsSinceEpoch}")
-          .putFile(_imageFile!)
-          .then((p0) {
-        var url = p0.ref.getDownloadURL();
-        print(url);
+          .child("posts/$userId/${DateTime.now().millisecondsSinceEpoch}");
+      UploadTask uploadTask = ref.putFile(_imageFile!);
+      uploadTask.then((res) async {
+        String downloadUrl = await res.ref.getDownloadURL();
+        HttpService().createPost(
+            uid: uid,
+            name: name,
+            postTitle: title,
+            contentType: "image",
+            url: downloadUrl,
+            target: "both");
       });
     } else {
       ///show snackbar
