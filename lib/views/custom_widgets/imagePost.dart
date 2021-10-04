@@ -1,26 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prestar/models/api_models/posts.dart';
 import 'package:prestar/views/common_screens/CommentsScreen.dart';
 import 'package:prestar/views/common_screens/LikesScreen.dart';
 
 class ImagePost extends StatefulWidget {
-  final String userName;
-  final String postTime;
-  final String imageDescription;
-  final String numberOfLikes;
-  final String numberOfComments;
-  final String numberOfShares;
-  final String imageUrl;
-  const ImagePost(
-      {Key? key,
-      this.userName = "User Name",
-      this.postTime = "1 min ago",
-      this.imageDescription = "This is a small image description",
-      this.numberOfLikes = "0",
-      this.numberOfComments = "0",
-      this.numberOfShares = "0",
-      required this.imageUrl})
-      : super(key: key);
+  late final Posts post;
+
+  ImagePost({Key? key, required this.post}) : super(key: key);
 
   @override
   _ImagePostState createState() => _ImagePostState();
@@ -34,9 +21,26 @@ enum Options {
 }
 
 class _ImagePostState extends State<ImagePost> {
+  late String userName;
+  late String postTime;
+  late String imageDescription;
+  late String numberOfLikes;
+  late String numberOfComments;
+  late String imageUrl;
   bool _isLiked = false;
   bool _isShared = false;
   var _selection = Options.none;
+  @override
+  void initState() {
+    super.initState();
+    userName = widget.post.authorName;
+    postTime = "1 min";
+    imageDescription = widget.post.title;
+    numberOfLikes = widget.post.likes.length.toString();
+    numberOfComments = widget.post.comments.length.toString();
+    imageUrl = widget.post.mediaUrl;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -58,7 +62,7 @@ class _ImagePostState extends State<ImagePost> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Text(
-                        widget.userName,
+                        userName,
                         style: TextStyle(
                             fontSize: 18,
                             color: Colors.black87,
@@ -68,12 +72,12 @@ class _ImagePostState extends State<ImagePost> {
                         width: 5,
                       ),
                       Text(
-                        'Posted ${widget.postTime}',
+                        'Posted ${postTime}',
                         style: TextStyle(fontSize: 12, color: Colors.black38),
                       ),
                     ],
                   ),
-                  Text(widget.imageDescription),
+                  Text(imageDescription),
                 ],
               ),
               PopupMenuButton<Options>(
@@ -115,7 +119,7 @@ class _ImagePostState extends State<ImagePost> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: Image.network(
-                  widget.imageUrl,
+                  imageUrl,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -142,11 +146,13 @@ class _ImagePostState extends State<ImagePost> {
                   SizedBox(
                     width: 5,
                   ),
-                  Text(widget.numberOfLikes),
+                  Text(numberOfLikes),
                   InkWell(
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => LikesScreen(),
+                        builder: (context) => LikesScreen(
+                          likes: widget.post.likes,
+                        ),
                       ),
                     ),
                     child: Text(
@@ -162,7 +168,9 @@ class _ImagePostState extends State<ImagePost> {
               InkWell(
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => CommentsScreen(),
+                    builder: (context) => CommentsScreen(
+                      comments: widget.post.comments,
+                    ),
                   ),
                 ),
                 child: Row(
@@ -171,7 +179,7 @@ class _ImagePostState extends State<ImagePost> {
                       Icons.comment_bank_outlined,
                       color: Colors.indigo,
                     ),
-                    Text(widget.numberOfComments),
+                    Text(numberOfComments),
                     Text(' Comment')
                   ],
                 ),
@@ -190,7 +198,6 @@ class _ImagePostState extends State<ImagePost> {
                       color: Colors.indigo,
                     ),
                   ),
-                  Text(widget.numberOfLikes),
                   Text(' Share')
                 ],
               ),
