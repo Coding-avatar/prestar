@@ -22,15 +22,25 @@ class _UserPostScreenState extends State<UserPostScreen> {
     return Container(
       width: double.infinity,
       color: Colors.white,
-      child: ListView.builder(
-          itemCount: posts.length,
-          shrinkWrap: true,
-          physics: AlwaysScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            return ImagePost(
-              imageUrl: '',
-            );
-          }),
+      child: posts.length == 0
+          ? Center(
+              child: Text(
+                'Sorry no Post to show',
+                style: TextStyle(
+                  color: Colors.black87,
+                ),
+              ),
+            )
+          : ListView.builder(
+              itemCount: posts.length,
+              shrinkWrap: true,
+              physics: AlwaysScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return CircularProgressIndicator();
+                //   ImagePost(
+                //   imageUrl: '',
+                // );
+              }),
     );
   }
 
