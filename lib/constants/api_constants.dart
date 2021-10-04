@@ -3,4 +3,5 @@ class ApiConstants {
   static const endpointRegisterUser = Base_url + "/users";
   static const endpointLoginUser = Base_url + "/users/login";
   static const fetchAllPost = Base_url + '/posts';
+  static const createPost = Base_url + '/posts';
 }
