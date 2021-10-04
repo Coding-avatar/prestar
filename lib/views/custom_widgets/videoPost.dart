@@ -179,7 +179,9 @@ class _VideoPostState extends State<VideoPost> {
                   InkWell(
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => LikesScreen(),
+                        builder: (context) => LikesScreen(
+                          likes: [],
+                        ),
                       ),
                     ),
                     child: Text(
@@ -195,7 +197,9 @@ class _VideoPostState extends State<VideoPost> {
               InkWell(
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => CommentsScreen(),
+                    builder: (context) => CommentsScreen(
+                      comments: [],
+                    ),
                   ),
                 ),
                 child: Row(
