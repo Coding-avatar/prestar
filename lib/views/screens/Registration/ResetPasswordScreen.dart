@@ -107,7 +107,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     Navigator.pop(context);
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => HomeScreen(),
+                        builder: (context) => HomeScreen(''),
                       ),
                     );
                   },
