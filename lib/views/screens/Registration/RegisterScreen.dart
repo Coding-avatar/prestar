@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:prestar/services/HttpService.dart';
 import 'package:prestar/services/auth_provider.dart';
+import 'package:prestar/views/custom_widgets/errorDialog.dart';
 import 'package:prestar/views/screens/Login/LoginScreen.dart';
 import 'package:prestar/views/screens/Registration/RegisterOtpScreen.dart';
 
@@ -14,6 +16,11 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   bool _isFormEnabled = true;
+
+  String get email => emailFieldController.text.trim();
+  String get password => passwordFieldController.text;
+  String get name => nameFieldController.text.trim();
+  String get phone => mobileNumberFieldController.text.trim();
   TextEditingController emailFieldController = new TextEditingController();
   TextEditingController nameFieldController = new TextEditingController();
   TextEditingController mobileNumberFieldController =
@@ -266,13 +273,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(
                   height: 55,
                   child: ElevatedButton(
-                    onPressed: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => RegisterOtpScreen(
-                          userMobileNumber: '1234567890',
-                        ),
-                      ),
-                    ),
+                    onPressed: () async {
+                      final auth = AuthProvider.of(context);
+                      var user = await auth.createUserWithEmailAndPassword(
+                          email, password);
+                      if (user != null) {
+                        HttpService()
+                            .registerUserWithEmailAndPassword(
+                                email: email, name: name, phone: phone)
+                            .then((value) => null);
+                      } else {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return ErrorDialog(
+                                titleText: "Registration failed",
+                                errorMessage: "Registration Failed",
+                              );
+                            });
+                      }
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                    },
                     style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(Color(0xff092497)),
