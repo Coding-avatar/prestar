@@ -1,12 +1,15 @@
 import 'dart:io';
 import 'dart:async';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:prestar/constants/shared_preference_constants.dart';
 import 'package:prestar/views/screens/GoLive/GoLiveDescriptionScreen.dart';
 import 'package:prestar/views/screens/Videos/VideoPostScreen.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:prestar/views/screens/Profile/ProfileScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common_screens/NotificationScreen.dart';
 
@@ -21,6 +24,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   String userName = "Rima Dutta";
   File? _imageFile;
   final _picker = ImagePicker();
+  final _storage = FirebaseStorage.instance;
   @override
   void initState() {
     super.initState();
@@ -246,6 +250,24 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       }
     } else {
       print('permission not granted');
+    }
+  }
+
+  uploadImage() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String userId =
+        sharedPreferences.getString(Constants.FirebaseUserUid) ?? 'default';
+    if (_imageFile != null) {
+      var snapshot = _storage
+          .ref()
+          .child("posts/$userId/${DateTime.now().millisecondsSinceEpoch}")
+          .putFile(_imageFile!)
+          .then((p0) {
+        var url = p0.ref.getDownloadURL();
+        print(url);
+      });
+    } else {
+      ///show snackbar
     }
   }
 }
