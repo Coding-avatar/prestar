@@ -30,20 +30,11 @@ class Auth implements AuthBase {
   @override
   Stream<User?> authStateChanges() => _firebaseAuth.authStateChanges();
 
-  Future<void> storeMongoDbUserDetails(
-      {required String uid,
-      required String name,
-      required String email}) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString(Constants.MongoDbUser, uid);
-    sharedPreferences.setString(Constants.MongoDbUserName, name);
-    sharedPreferences.setString(Constants.MongoDbUserEmail, email);
-  }
-
-  Future<void> storeFirebaseUserUid(String value) async {
+  Future<void> storeFirebaseUserUid(String value, String email) async {
     print('Storing Firebase user uid $value');
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString(Constants.FirebaseUserUid, value);
+    sharedPreferences.setString(Constants.MongoDbUserEmail, email);
   }
 
   @override
@@ -63,7 +54,6 @@ class Auth implements AuthBase {
             .findUserWithEmail(email: userCredential.user!.email ?? '')
             .then((res) {
           if (res.statusCode == 200) {
-            /// user document returned nothing to do
           } else if (res.statusCode == 404) {
             HttpService()
                 .registerUserWithGoogle(
@@ -73,9 +63,6 @@ class Auth implements AuthBase {
                     usedGoogleAuth: true)
                 .then((res) {
               if (res.statusCode == 200) {
-                MongoUser newUser = MongoUser.fromJson(jsonDecode(res.body));
-                storeMongoDbUserDetails(
-                    name: newUser.name, uid: newUser.sId, email: newUser.email);
               } else {
                 ///handle error somehow
               }
@@ -84,7 +71,8 @@ class Auth implements AuthBase {
             ///handle error somehow
           }
         });
-        storeFirebaseUserUid(userCredential.user!.uid.toString());
+        storeFirebaseUserUid(userCredential.user!.uid.toString(),
+            userCredential.user!.email.toString());
         return userCredential.user;
       } else {
         // ErrorDialog(
@@ -110,7 +98,8 @@ class Auth implements AuthBase {
       String email, String password) async {
     final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
-    storeFirebaseUserUid(userCredential.user!.uid.toString());
+    storeFirebaseUserUid(userCredential.user!.uid.toString(),
+        userCredential.user!.email.toString());
     return userCredential.user;
   }
 
@@ -120,7 +109,8 @@ class Auth implements AuthBase {
     final userCredential = await _firebaseAuth.signInWithCredential(
       EmailAuthProvider.credential(email: email, password: password),
     );
-    storeFirebaseUserUid(userCredential.user!.uid.toString());
+    storeFirebaseUserUid(userCredential.user!.uid.toString(),
+        userCredential.user!.email.toString());
     return userCredential.user;
   }
 
