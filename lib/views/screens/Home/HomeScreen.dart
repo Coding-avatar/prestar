@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:prestar/constants/shared_preference_constants.dart';
+import 'package:prestar/models/api_models/mongoUser.dart';
 import 'package:prestar/models/api_models/posts.dart';
 import 'package:prestar/models/imagePostInfo.dart';
 import 'package:prestar/services/HttpService.dart';
@@ -18,11 +20,12 @@ import 'package:prestar/views/screens/GoLive/GoLiveDescriptionScreen.dart';
 import 'package:prestar/views/screens/CreatePost/PostScreen.dart';
 import 'package:prestar/views/screens/Profile/userFollowersScreen.dart';
 import 'package:prestar/views/screens/Videos/VideoPostScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
+  const HomeScreen(this.email, {Key? key}) : super(key: key);
+  final String email;
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -32,7 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late String appVersion;
   List<Posts> _postData = List.empty(growable: true);
   List bannerImages = List.empty(growable: true);
-
   List bannerVideos = [
     {
       'thumbnail':
@@ -65,9 +67,11 @@ class _HomeScreenState extends State<HomeScreen> {
           "https://player.vimeo.com/external/214503838.sd.mp4?s=0aac7d3caa1d5eedbd97234814b1ca37904b71b2&profile_id=164&oauth2_token_id=57447761"
     },
   ];
+  late String email;
   @override
   void initState() {
     super.initState();
+    email = widget.email;
     PackageInfo.fromPlatform().then((packageInfo) {
       this.packageInfo = packageInfo;
       setState(() {
@@ -83,6 +87,20 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  Future<void> storeMongoDbUserDetails(
+      {required String uid,
+      required String name,
+      required String email}) async {
+    print('called update data');
+    print(uid);
+    print(name);
+    print(email);
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString(Constants.MongoDbUser, uid);
+    sharedPreferences.setString(Constants.MongoDbUserName, name);
+    sharedPreferences.setString(Constants.MongoDbUserEmail, email);
   }
 
   @override
@@ -409,6 +427,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   errorMessage: "Sorry could not fetch posts");
             });
       }
+    });
+    HttpService().findUserWithEmail(email: email).then((res) {
+      print('finding user from mongo');
+      MongoUser currentUser = MongoUser.fromJson(jsonDecode(res.body));
+      storeMongoDbUserDetails(
+          uid: currentUser.sId, name: currentUser.name, email: email);
     });
   }
 
