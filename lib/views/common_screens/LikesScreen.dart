@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:prestar/models/api_models/posts.dart';
 
 class LikesScreen extends StatefulWidget {
-  const LikesScreen({Key? key}) : super(key: key);
+  final List<Likes> likes;
+  LikesScreen({Key? key, required this.likes}) : super(key: key);
 
   @override
   _LikesScreenState createState() => _LikesScreenState();
 }
 
 class _LikesScreenState extends State<LikesScreen> {
+  late List<Likes> likes;
+  @override
+  void initState() {
+    super.initState();
+    likes = widget.likes;
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -23,75 +32,36 @@ class _LikesScreenState extends State<LikesScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          'People who liked this post',
+          'Likes',
           style: TextStyle(color: Colors.black54),
         ),
         centerTitle: true,
       ),
-      body: ListView(
-        children: [
-          ListTile(
-            leading: CircleAvatar(
-              backgroundImage: AssetImage("assets/images/profile1.jpg"),
+      body: likes.length == 0
+          ? Container(
+              height: screenHeight,
+              width: screenWidth,
+              alignment: Alignment.center,
+              child: Text('No Likes to show'),
+            )
+          : ListView.builder(
+              itemCount: likes.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage:
+                        NetworkImage(likes[index].authorProfileImage),
+                  ),
+                  title: Text(
+                    likes[index].authorName,
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w700),
+                  ),
+                );
+              },
             ),
-            title: Text(
-              'Rima Dutta',
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w700),
-            ),
-          ),
-          ListTile(
-            leading: CircleAvatar(
-              backgroundImage: AssetImage("assets/images/profile2.jpg"),
-            ),
-            title: Text(
-              'Rima Dutta',
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w700),
-            ),
-          ),
-          ListTile(
-            leading: CircleAvatar(
-              backgroundImage: AssetImage("assets/images/profile1.jpg"),
-            ),
-            title: Text(
-              'Rima Dutta',
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w700),
-            ),
-          ),
-          ListTile(
-            leading: CircleAvatar(
-              backgroundImage: AssetImage("assets/images/profile2.jpg"),
-            ),
-            title: Text(
-              'Rima Dutta',
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w700),
-            ),
-          ),
-          ListTile(
-            leading: CircleAvatar(
-              backgroundImage: AssetImage("assets/images/profile1.jpg"),
-            ),
-            title: Text(
-              'Rima Dutta',
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w700),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
