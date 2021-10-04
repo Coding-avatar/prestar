@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:prestar/models/api_models/posts.dart';
 
 class CommentsScreen extends StatefulWidget {
-  const CommentsScreen({Key? key}) : super(key: key);
+  final List<Comments> comments;
+  CommentsScreen({Key? key, required this.comments}) : super(key: key);
 
   @override
   _CommentsScreenState createState() => _CommentsScreenState();
 }
 
 class _CommentsScreenState extends State<CommentsScreen> {
+  late List<Comments> comments;
+  @override
+  void initState() {
+    super.initState();
+    comments = widget.comments;
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -16,7 +25,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
       appBar: AppBar(
         backgroundColor: Color(0xfff1eeee),
         title: Text(
-          'People who comments',
+          'Comments',
           style: TextStyle(color: Colors.black54),
         ),
         leading: IconButton(
@@ -28,90 +37,48 @@ class _CommentsScreenState extends State<CommentsScreen> {
         ),
         centerTitle: true,
       ),
-      body: ListView(
-        children: [
-          ListTile(
-            leading: CircleAvatar(
-              backgroundImage: AssetImage("assets/images/profile1.jpg"),
+      body: comments.length == 0
+          ? Container(
+              height: screenHeight,
+              width: screenWidth,
+              alignment: Alignment.center,
+              child: Text('No Comments to show'),
+            )
+          : ListView.builder(
+              itemCount: comments.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage:
+                        NetworkImage(comments[index].authorProfileImage),
+                  ),
+                  title: Text(
+                    comments[index].authorName,
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(comments[index].message),
+                      Row(
+                        children: [
+                          TextButton(
+                            onPressed: null,
+                            child: Text('Reply'),
+                            style: ButtonStyle(
+                                padding:
+                                    MaterialStateProperty.all(EdgeInsets.zero)),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                );
+              },
             ),
-            title: Text(
-              'Mr Cat',
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w700),
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('hello friends'),
-                Row(
-                  children: [
-                    TextButton(
-                      onPressed: null,
-                      child: Text('Reply'),
-                      style: ButtonStyle(
-                          padding: MaterialStateProperty.all(EdgeInsets.zero)),
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-          ListTile(
-            leading: CircleAvatar(
-              backgroundImage: AssetImage("assets/images/profile2.jpg"),
-            ),
-            title: Text(
-              'Rima Dutta',
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w700),
-            ),
-            subtitle: Text('Hi'),
-          ),
-          ListTile(
-            leading: CircleAvatar(
-              backgroundImage: AssetImage("assets/images/profile1.jpg"),
-            ),
-            title: Text(
-              'Rima Dutta',
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w700),
-            ),
-            subtitle: Text('hello friends'),
-          ),
-          ListTile(
-            leading: CircleAvatar(
-              backgroundImage: AssetImage("assets/images/profile2.jpg"),
-            ),
-            title: Text(
-              'Rima Dutta',
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w700),
-            ),
-            subtitle: Text('hello friends'),
-          ),
-          ListTile(
-            leading: CircleAvatar(
-              backgroundImage: AssetImage("assets/images/profile1.jpg"),
-            ),
-            title: Text(
-              'Rima Dutta',
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w700),
-            ),
-            subtitle: Text('hello friends'),
-          ),
-        ],
-      ),
     );
   }
 }
