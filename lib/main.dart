@@ -105,7 +105,7 @@ class RedirectUser extends StatelessWidget {
           if (user == null) {
             return LoginScreen();
           }
-          return HomeScreen();
+          return HomeScreen(user.email ?? '');
         }
         return Container(
           height: MediaQuery.of(context).size.height,
