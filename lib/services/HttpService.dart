@@ -36,7 +36,7 @@ class HttpService {
               "phone": phone,
             }));
 
-    print('Register User Response: ${res.body}');
+    // print('Register User Response: ${res.body}');
     return res;
   }
 
@@ -75,7 +75,7 @@ class HttpService {
               }
             }));
 
-    print('Register User Response: ${res.body}');
+    // print('Register User Response: ${res.body}');
     return res;
   }
 
@@ -87,7 +87,7 @@ class HttpService {
       },
     );
 
-    print('Fetch all post of user Response: ${res.body}');
+    // print('Fetch all post of user Response: ${res.body}');
     return res;
   }
 
@@ -99,21 +99,32 @@ class HttpService {
       },
     );
 
-    print('Fetch user details Response: ${res.body}');
+    // print('Fetch user details Response: ${res.body}');
     return res;
   }
 
-  Future<http.Response> createPost({
-    required String uid,
-  }) async {
-    http.Response res = await http.get(
-      Uri.parse(ApiConstants.Base_url + "/users/$uid"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
+  Future<http.Response> createPost(
+      {required String uid,
+      required String name,
+      required String postTitle,
+      required String contentType,
+      required String url,
+      required String target}) async {
+    http.Response res = await http.post(Uri.parse(ApiConstants.createPost),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          "authorId": uid,
+          "authorName": name,
+          "title": postTitle,
+          "contentType": contentType,
+          "mediaUrl": url,
+          "targetAudience": target,
+          "contentCategories": [postTitle],
+        }));
 
-    print('Fetch user details Response: ${res.body}');
+    print('Create Post Response: ${res.body}');
     return res;
   }
 
