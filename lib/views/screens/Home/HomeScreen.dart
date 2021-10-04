@@ -1,10 +1,16 @@
+import 'dart:convert';
+
 import 'package:better_player/better_player.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:prestar/models/api_models/posts.dart';
 import 'package:prestar/models/imagePostInfo.dart';
+import 'package:prestar/services/HttpService.dart';
 import 'package:prestar/views/common_screens/NotificationScreen.dart';
+import 'package:prestar/views/custom_widgets/errorDialog.dart';
 import 'package:prestar/views/screens/Profile/ProfileScreen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:prestar/views/custom_widgets/imagePost.dart';
@@ -12,6 +18,7 @@ import 'package:prestar/views/screens/GoLive/GoLiveDescriptionScreen.dart';
 import 'package:prestar/views/screens/CreatePost/PostScreen.dart';
 import 'package:prestar/views/screens/Profile/userFollowersScreen.dart';
 import 'package:prestar/views/screens/Videos/VideoPostScreen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -21,7 +28,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<ImagePostInfo> _postData = List.empty(growable: true);
+  late PackageInfo packageInfo;
+  late String appVersion;
+  List<Posts> _postData = List.empty(growable: true);
   List bannerImages = List.empty(growable: true);
 
   List bannerVideos = [
@@ -59,9 +68,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    fillData();
-    print("InitState");
+    PackageInfo.fromPlatform().then((packageInfo) {
+      this.packageInfo = packageInfo;
+      setState(() {
+        appVersion = packageInfo.version;
+      });
+      print('build number : ${packageInfo.buildNumber}');
+    });
     fetchBannerList();
+    fillData();
+    checkForUpdates();
   }
 
   @override
@@ -195,39 +211,39 @@ class _HomeScreenState extends State<HomeScreen> {
                       scrollDirection: Axis.horizontal,
                     ),
                   ),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.only(
-                      right: 10,
-                      left: 10,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Recent Live Videos',
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black87,
-                              fontWeight: FontWeight.w800),
-                        ),
-                        InkWell(
-                          onTap: () =>
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => UserFollowersScreen(
-                                        uid: 'test',
-                                      ))),
-                          child: Text(
-                            'View All',
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.blue,
-                                fontWeight: FontWeight.w800),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Container(
+                  //   width: double.infinity,
+                  //   padding: EdgeInsets.only(
+                  //     right: 10,
+                  //     left: 10,
+                  //   ),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       Text(
+                  //         'Recent Live Videos',
+                  //         style: TextStyle(
+                  //             fontSize: 18,
+                  //             color: Colors.black87,
+                  //             fontWeight: FontWeight.w800),
+                  //       ),
+                  //       InkWell(
+                  //         onTap: () =>
+                  //             Navigator.of(context).push(MaterialPageRoute(
+                  //                 builder: (context) => UserFollowersScreen(
+                  //                       uid: 'test',
+                  //                     ))),
+                  //         child: Text(
+                  //           'View All',
+                  //           style: TextStyle(
+                  //               fontSize: 18,
+                  //               color: Colors.blue,
+                  //               fontWeight: FontWeight.w800),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   // CarouselSlider.builder(
                   //   itemCount: bannerVideos.length,
                   //   itemBuilder: (BuildContext context, int itemIndex,
@@ -275,14 +291,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   //     scrollDirection: Axis.horizontal,
                   //   ),
                   // ),
-                  ListView.builder(
-                    itemCount: _postData.length,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return ImagePost(imageUrl: _postData[index].imageUrl);
-                    },
-                  )
+                  _postData.length == 0
+                      ? Center(child: CircularProgressIndicator())
+                      : ListView.builder(
+                          itemCount: _postData.length,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return ImagePost(
+                              post: _postData[index],
+                            );
+                          },
+                        )
                 ],
               ),
             ),
@@ -372,16 +392,23 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void fillData() {
-    setState(() {
-      _postData.add(ImagePostInfo(
-        imageUrl:
-            'https://images.pexels.com/photos/7365263/pexels-photo-7365263.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
-        imageTitle: 'Image 1',
-      ));
-      _postData.add(ImagePostInfo(
-        imageUrl:
-            'https://images.pexels.com/videos/856065/pictures/preview-0.jpg',
-      ));
+    HttpService().fetchAllPost().then((res) {
+      if (res.statusCode == 200) {
+        var responseJson = jsonDecode(res.body);
+        responseJson.forEach((data) {
+          Posts post = Posts.fromJson(data);
+          _postData.add(post);
+        });
+        setState(() {});
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return ErrorDialog(
+                  titleText: "Network Error",
+                  errorMessage: "Sorry could not fetch posts");
+            });
+      }
     });
   }
 
@@ -424,16 +451,120 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     } catch (e) {
       print(e.toString());
-      // showAboutDialog(context: context)
+      showDialog(
+          context: context,
+          builder: (context) {
+            return ErrorDialog(
+                titleText: "Network Error", errorMessage: e.toString());
+          });
     }
-    // print(result.banner1);
   }
-  // void fetchBannerList() async {
-  //   print("fetching banner list");
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     bannerImages = prefs.getStringList("banner")!;
-  //   });
-  //   print(prefs.getStringList("banner"));
-  // }
+
+  void checkForUpdates() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("/appData")
+          .doc('updateInfo')
+          .get()
+          .then((document) {
+        if (appVersion != document.get("appVersion")) {
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return WillPopScope(
+                  onWillPop: () => Future.value(false),
+                  child: AlertDialog(
+                    content: Container(
+                      height: 250,
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: CircleAvatar(
+                              radius: 30,
+                              backgroundColor: Colors.green,
+                              child: Icon(
+                                Icons.done,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              "ALERT!",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  color: Colors.black),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    launch(document.get("downloadUrl"));
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 8),
+                                    child: Text(
+                                      'UPDATE APP',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.green),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () => SystemNavigator.pop(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 8),
+                                    child: Text(
+                                      'CLOSE APP',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.red),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              });
+        } else {
+          print('app is up to date');
+        }
+      });
+    } catch (e) {
+      print(e.toString());
+      showDialog(
+          context: context,
+          builder: (context) {
+            return ErrorDialog(
+                titleText: "Network Error", errorMessage: e.toString());
+          });
+    }
+  }
 }
