@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:prestar/constants/shared_preference_constants.dart';
 import 'package:prestar/services/auth_provider.dart';
+import 'package:prestar/views/custom_widgets/errorDialog.dart';
 import 'package:prestar/views/screens/Profile/SettingsScreen.dart';
 import 'package:prestar/views/screens/Profile/EditProfile/editProfileScreen.dart';
 import 'package:prestar/views/custom_widgets/videoPost.dart';
@@ -10,6 +12,7 @@ import 'package:prestar/views/screens/Profile/userFollowersScreen.dart';
 import 'package:prestar/views/screens/Profile/userFollowingScreen.dart';
 import 'package:prestar/views/screens/Profile/userPostScreen.dart';
 import 'package:prestar/views/screens/Profile/userVideosScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../GoLive/GoLiveDescriptionScreen.dart';
 import '../../common_screens/NotificationScreen.dart';
 import '../CreatePost/PostScreen.dart';
@@ -30,6 +33,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       userFollowers = '1.3k',
       userVideos = '56',
       userPosts = '151';
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((prefs) =>
+        print('User uid ${prefs.getString(Constants.FirebaseUserUid)}'));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -496,6 +504,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final auth = AuthProvider.of(context);
     try {
       auth.signOut();
+      Navigator.of(context).popUntil((route) => route.isFirst);
     } catch (e) {
       print(e.toString());
     }
