@@ -24,6 +24,7 @@ class CreatePostScreen extends StatefulWidget {
 class _CreatePostScreenState extends State<CreatePostScreen> {
   String userName = "Rima Dutta";
   File? _imageFile;
+  bool _isLoading = false;
   final _picker = ImagePicker();
   final _storage = FirebaseStorage.instance;
   TextEditingController titleController = new TextEditingController();
@@ -146,11 +147,18 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               height: 100,
               padding: EdgeInsets.all(20),
               child: ElevatedButton(
-                onPressed: () {
-                  print('post created');
-                  uploadImage();
-                },
-                child: Text('Create Post'),
+                onPressed: _isLoading
+                    ? null
+                    : () {
+                        print('post created');
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        uploadImage();
+                      },
+                child: _isLoading
+                    ? CircularProgressIndicator()
+                    : Text('Create Post'),
               ),
             )
           ],
@@ -280,9 +288,17 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             contentType: "image",
             url: downloadUrl,
             target: "both");
+      }).then((value) {
+        setState(() {
+          _isLoading = false;
+        });
       });
     } else {
-      ///show snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please Choose an Image'),
+        ),
+      );
     }
   }
 }
