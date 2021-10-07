@@ -12,6 +12,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  /// Form will be disabled when user uses any of the authentication methods until a response is returned from Firebase auth
   bool _isFormDisabled = false;
   TextEditingController emailFieldController = new TextEditingController();
   TextEditingController passwordFieldController = new TextEditingController();
@@ -21,21 +22,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool _isEmailValid = true;
   String emailErrorText = "Please Enter a valid email address";
+
+  /// returns the current value of email TextField
   String get email => emailFieldController.text.trim();
 
   bool _isPasswordVisible = false;
   bool _isPasswordValid = true;
+
+  /// returns the current value of password TextField
   String get password => passwordFieldController.text;
   String passwordErrorText = "Password must be of minimum 6 characters";
 
   @override
   void initState() {
     super.initState();
-    //method to hide keyboard on startup
-    // Future.delayed(
-    //   Duration(),
-    //   () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
-    // );
   }
 
   @override
