@@ -31,7 +31,7 @@ class UserTile extends StatelessWidget {
               radius: 32,
               child: CircleAvatar(
                 radius: 30,
-                backgroundImage: AssetImage("assets/images/profile2.jpg"),
+                backgroundImage: NetworkImage(userPhotoUrl),
               ),
             ),
             SizedBox(
