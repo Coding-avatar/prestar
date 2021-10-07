@@ -103,6 +103,17 @@ class HttpService {
     return res;
   }
 
+  Future<http.Response> fetchAllUsers() async {
+    http.Response res = await http.get(
+      Uri.parse(ApiConstants.Base_url + "/users"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    print('Fetch All Users Response: ${res.body}');
+    return res;
+  }
+
   Future<http.Response> createPost(
       {required String uid,
       required String name,
