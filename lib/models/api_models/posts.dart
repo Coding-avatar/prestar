@@ -1,4 +1,4 @@
-class Posts {
+class PostData {
   late List<String> contentCategories;
   late String sId;
   late String authorId;
@@ -11,7 +11,7 @@ class Posts {
   late List<Likes> likes;
   late int iV;
 
-  Posts(
+  PostData(
       {required this.contentCategories,
       required this.authorId,
       required this.sId,
@@ -24,7 +24,7 @@ class Posts {
       required this.likes,
       required this.iV});
 
-  Posts.fromJson(Map<String, dynamic> json) {
+  PostData.fromJson(Map<String, dynamic> json) {
     contentCategories = json['contentCategories'].cast<String>();
     sId = json['_id'];
     authorId = json['authorId'];
