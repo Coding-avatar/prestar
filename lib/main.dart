@@ -5,10 +5,12 @@ import 'package:prestar/services/auth.dart';
 import 'package:prestar/services/auth_provider.dart';
 import 'package:prestar/views/screens/Home/HomeScreen.dart';
 import 'package:prestar/views/screens/Login/LoginScreen.dart';
-import 'package:prestar/views/screens/Profile/ProfileScreen.dart';
 
 void main() async {
+  /// Ensures that widget binding is complete
   WidgetsFlutterBinding.ensureInitialized();
+
+  /// Initializing Firebase app
   await Firebase.initializeApp();
   runApp(MyApp());
 }
@@ -16,7 +18,10 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    /// AuthProvider is an inherited widget to provide auth services to different widgets
+    /// You can make use of the Auth.of(context) to access auth methods from lib/services/auth.dart
     return AuthProvider(
+      /// Instance of Auth class
       auth: Auth(),
       child: MaterialApp(
         title: 'Prestar',
@@ -93,6 +98,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+///redirects user to Login or Homepage based on the status of Firebase AuthStateChanges stream
 class RedirectUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -107,6 +113,8 @@ class RedirectUser extends StatelessWidget {
           }
           return HomeScreen(user.email ?? '');
         }
+
+        /// default view when Firebase AuthStateChanges stream has not started emitting any values
         return Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
