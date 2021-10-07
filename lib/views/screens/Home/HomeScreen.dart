@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:better_player/better_player.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -87,18 +88,19 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  Future<void> storeMongoDbUserDetails(
-      {required String uid,
-      required String name,
-      required String email}) async {
-    print('called update data');
-    print(uid);
-    print(name);
-    print(email);
+  Future<void> storeMongoDbUserDetails({
+    required String uid,
+    required String name,
+    required String email,
+    required List<String> followers,
+    required List<String> following,
+  }) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString(Constants.MongoDbUser, uid);
     sharedPreferences.setString(Constants.MongoDbUserName, name);
     sharedPreferences.setString(Constants.MongoDbUserEmail, email);
+    sharedPreferences.setStringList(Constants.MongoUserFollowers, followers);
+    sharedPreferences.setStringList(Constants.MongoUserFollowing, following);
   }
 
   @override
@@ -206,9 +208,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             borderRadius: BorderRadius.circular(25),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(25),
-                              child: Image.network(
-                                bannerImages[itemIndex],
-                                fit: BoxFit.fill,
+                              child: CachedNetworkImage(
+                                imageUrl: bannerImages[itemIndex],
+                                placeholder: (context, url) =>
+                                    CircularProgressIndicator(),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
                               ),
                             ),
                           ),
@@ -430,10 +435,17 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
     HttpService().findUserWithEmail(email: email).then((res) {
-      print('finding user from mongo');
       MongoUser currentUser = MongoUser.fromJson(jsonDecode(res.body));
       storeMongoDbUserDetails(
-          uid: currentUser.sId, name: currentUser.name, email: email);
+          uid: currentUser.sId,
+          name: currentUser.name,
+          email: email,
+          followers: currentUser.followers!
+              .map((followerObject) => followerObject.refUserId)
+              .toList(growable: true),
+          following: currentUser.following!
+              .map((followingObject) => followingObject.refUserId)
+              .toList(growable: true));
     });
   }
 
