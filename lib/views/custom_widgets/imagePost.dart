@@ -5,9 +5,9 @@ import 'package:prestar/views/common_screens/CommentsScreen.dart';
 import 'package:prestar/views/common_screens/LikesScreen.dart';
 
 class ImagePost extends StatefulWidget {
-  late final Posts post;
+  late final PostData postData;
 
-  ImagePost({Key? key, required this.post}) : super(key: key);
+  ImagePost({Key? key, required this.postData}) : super(key: key);
 
   @override
   _ImagePostState createState() => _ImagePostState();
@@ -33,12 +33,12 @@ class _ImagePostState extends State<ImagePost> {
   @override
   void initState() {
     super.initState();
-    userName = widget.post.authorName;
+    userName = widget.postData.authorName;
     postTime = "1 min";
-    imageDescription = widget.post.title;
-    numberOfLikes = widget.post.likes.length.toString();
-    numberOfComments = widget.post.comments.length.toString();
-    imageUrl = widget.post.mediaUrl;
+    imageDescription = widget.postData.title;
+    numberOfLikes = widget.postData.likes.length.toString();
+    numberOfComments = widget.postData.comments.length.toString();
+    imageUrl = widget.postData.mediaUrl;
   }
 
   @override
@@ -151,7 +151,7 @@ class _ImagePostState extends State<ImagePost> {
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => LikesScreen(
-                          likes: widget.post.likes,
+                          likes: widget.postData.likes,
                         ),
                       ),
                     ),
@@ -169,7 +169,7 @@ class _ImagePostState extends State<ImagePost> {
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => CommentsScreen(
-                      comments: widget.post.comments,
+                      comments: widget.postData.comments,
                     ),
                   ),
                 ),

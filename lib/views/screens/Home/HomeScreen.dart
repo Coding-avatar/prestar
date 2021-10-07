@@ -9,7 +9,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:prestar/constants/shared_preference_constants.dart';
 import 'package:prestar/models/api_models/mongoUser.dart';
 import 'package:prestar/models/api_models/posts.dart';
-import 'package:prestar/models/imagePostInfo.dart';
 import 'package:prestar/services/HttpService.dart';
 import 'package:prestar/views/common_screens/NotificationScreen.dart';
 import 'package:prestar/views/custom_widgets/errorDialog.dart';
@@ -18,7 +17,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:prestar/views/custom_widgets/imagePost.dart';
 import 'package:prestar/views/screens/GoLive/GoLiveDescriptionScreen.dart';
 import 'package:prestar/views/screens/CreatePost/PostScreen.dart';
-import 'package:prestar/views/screens/Profile/userFollowersScreen.dart';
 import 'package:prestar/views/screens/Videos/VideoPostScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -33,7 +31,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late PackageInfo packageInfo;
   late String appVersion;
-  List<Posts> _postData = List.empty(growable: true);
+  List<PostData> _postData = List.empty(growable: true);
   List bannerImages = List.empty(growable: true);
   List bannerVideos = [
     {
@@ -318,7 +316,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
                               return ImagePost(
-                                post: _postData[index],
+                                postData: _postData[index],
                               );
                             },
                           )
@@ -417,7 +415,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (res.statusCode == 200) {
         var responseJson = jsonDecode(res.body);
         responseJson.forEach((data) {
-          Posts post = Posts.fromJson(data);
+          PostData post = PostData.fromJson(data);
           _postData.add(post);
         });
         setState(() {});
