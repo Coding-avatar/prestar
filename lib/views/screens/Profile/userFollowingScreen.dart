@@ -1,6 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:prestar/constants/shared_preference_constants.dart';
+import 'package:prestar/models/api_models/mongoUser.dart';
+import 'package:prestar/services/HttpService.dart';
+import 'package:prestar/views/custom_widgets/errorDialog.dart';
 import 'package:prestar/views/custom_widgets/userTile.dart';
-import 'package:prestar/models/userModel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserFollowingScreen extends StatefulWidget {
   const UserFollowingScreen({Key? key, required this.uid}) : super(key: key);
@@ -11,12 +16,18 @@ class UserFollowingScreen extends StatefulWidget {
 
 class _UserFollowingScreenState extends State<UserFollowingScreen> {
   bool _isLoading = false;
-  List<AppUser> _followingList = List.empty(growable: true);
+  List<MongoUser> _followingList = List.empty(growable: true);
+  List<String> following = List.empty(growable: true);
 
   @override
   void initState() {
     super.initState();
-    fetchUserFollowers();
+    SharedPreferences.getInstance().then((prefs) {
+      setState(() {
+        following = prefs.getStringList(Constants.MongoUserFollowing)!;
+      });
+      fetchUserFollowing();
+    });
   }
 
   @override
@@ -41,62 +52,42 @@ class _UserFollowingScreenState extends State<UserFollowingScreen> {
               itemCount: _followingList.length,
               itemBuilder: (context, index) {
                 return UserTile(
-                    uid: _followingList[index].uid,
-                    userPhotoUrl: _followingList[index].profile_pic ?? '',
+                    uid: _followingList[index].sId,
+                    userPhotoUrl: _followingList[index].profileImage,
                     userName: _followingList[index].name,
-                    userLocation: _followingList[index].location ?? '');
+                    userLocation: _followingList[index].location!.address);
               }),
     );
   }
 
-  void fetchUserFollowers() {
-    /// Dummy Data
+  void fetchUserFollowing() {
     setState(() {
-      _followingList.add(AppUser(
-          uid: "123456",
-          name: "Rahul Ghosh",
-          location: 'Dum Dum',
-          email: 'rahulghosh123@gmail.com'));
-      _followingList.add(AppUser(
-          uid: "123456",
-          name: "Rahul Ghosh",
-          location: 'Dum Dum',
-          email: 'rahulghosh123@gmail.com'));
-      _followingList.add(AppUser(
-          uid: "123456",
-          name: "Rahul Ghosh",
-          location: 'Dum Dum',
-          email: 'rahulghosh123@gmail.com'));
-      _followingList.add(AppUser(
-          uid: "123456",
-          name: "Rahul Ghosh",
-          location: 'Dum Dum',
-          email: 'rahulghosh123@gmail.com'));
-      _followingList.add(AppUser(
-          uid: "123456",
-          name: "Rahul Ghosh",
-          location: 'Dum Dum',
-          email: 'rahulghosh123@gmail.com'));
-      _followingList.add(AppUser(
-          uid: "123456",
-          name: "Rahul Ghosh",
-          location: 'Dum Dum',
-          email: 'rahulghosh123@gmail.com'));
-      _followingList.add(AppUser(
-          uid: "123456",
-          name: "Rahul Ghosh",
-          location: 'Dum Dum',
-          email: 'rahulghosh123@gmail.com'));
-      _followingList.add(AppUser(
-          uid: "123456",
-          name: "Rahul Ghosh",
-          location: 'Dum Dum',
-          email: 'rahulghosh123@gmail.com'));
-      _followingList.add(AppUser(
-          uid: "123456",
-          name: "Rahul Ghosh",
-          location: 'Dum Dum',
-          email: 'rahulghosh123@gmail.com'));
+      _isLoading = true;
+    });
+    HttpService().fetchAllUsers().then((res) {
+      if (res.statusCode == 200) {
+        var responseJSON = jsonDecode(res.body);
+        responseJSON.forEach((element) {
+          MongoUser user = MongoUser.fromJson(element);
+          if (following.contains(user.sId)) {
+            _followingList.add(user);
+          }
+        });
+        setState(() {
+          _isLoading = false;
+        });
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return ErrorDialog(
+                  titleText: 'Network Error',
+                  errorMessage: "Something went wrong");
+            });
+      }
+      setState(() {
+        _isLoading = false;
+      });
     });
   }
 }
