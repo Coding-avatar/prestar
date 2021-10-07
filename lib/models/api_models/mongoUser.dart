@@ -66,7 +66,9 @@ class MongoUser {
       followers = List.empty();
     }
     iV = json['__v'];
-    profileImage = json['profileImage'] ?? profileImage;
+    profileImage = json['profileImage'] != null
+        ? json['profileImage']
+        : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
   }
 }
 
