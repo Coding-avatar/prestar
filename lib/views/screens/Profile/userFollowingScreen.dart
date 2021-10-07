@@ -10,7 +10,8 @@ class UserFollowingScreen extends StatefulWidget {
 }
 
 class _UserFollowingScreenState extends State<UserFollowingScreen> {
-  List<AppUser> followingList = List.empty(growable: true);
+  bool _isLoading = false;
+  List<AppUser> _followingList = List.empty(growable: true);
 
   @override
   void initState() {
@@ -22,67 +23,76 @@ class _UserFollowingScreenState extends State<UserFollowingScreen> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      child: GridView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-          ),
-          itemCount: followingList.length,
-          itemBuilder: (context, index) {
-            return UserTile(
-                uid: followingList[index].uid,
-                userPhotoUrl: followingList[index].profile_pic ?? '',
-                userName: followingList[index].name,
-                userLocation: followingList[index].location ?? '');
-          }),
+      constraints: BoxConstraints(
+          minHeight: MediaQuery.of(context).size.height,
+          minWidth: MediaQuery.of(context).size.width),
+      child: _followingList.length == 0
+          ? Center(
+              child: _isLoading
+                  ? Text('Sorry no followers to show')
+                  : CircularProgressIndicator(),
+            )
+          : GridView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+              ),
+              itemCount: _followingList.length,
+              itemBuilder: (context, index) {
+                return UserTile(
+                    uid: _followingList[index].uid,
+                    userPhotoUrl: _followingList[index].profile_pic ?? '',
+                    userName: _followingList[index].name,
+                    userLocation: _followingList[index].location ?? '');
+              }),
     );
   }
 
   void fetchUserFollowers() {
     /// Dummy Data
     setState(() {
-      followingList.add(AppUser(
+      _followingList.add(AppUser(
           uid: "123456",
           name: "Rahul Ghosh",
           location: 'Dum Dum',
           email: 'rahulghosh123@gmail.com'));
-      followingList.add(AppUser(
+      _followingList.add(AppUser(
           uid: "123456",
           name: "Rahul Ghosh",
           location: 'Dum Dum',
           email: 'rahulghosh123@gmail.com'));
-      followingList.add(AppUser(
+      _followingList.add(AppUser(
           uid: "123456",
           name: "Rahul Ghosh",
           location: 'Dum Dum',
           email: 'rahulghosh123@gmail.com'));
-      followingList.add(AppUser(
+      _followingList.add(AppUser(
           uid: "123456",
           name: "Rahul Ghosh",
           location: 'Dum Dum',
           email: 'rahulghosh123@gmail.com'));
-      followingList.add(AppUser(
+      _followingList.add(AppUser(
           uid: "123456",
           name: "Rahul Ghosh",
           location: 'Dum Dum',
           email: 'rahulghosh123@gmail.com'));
-      followingList.add(AppUser(
+      _followingList.add(AppUser(
           uid: "123456",
           name: "Rahul Ghosh",
           location: 'Dum Dum',
           email: 'rahulghosh123@gmail.com'));
-      followingList.add(AppUser(
+      _followingList.add(AppUser(
           uid: "123456",
           name: "Rahul Ghosh",
           location: 'Dum Dum',
           email: 'rahulghosh123@gmail.com'));
-      followingList.add(AppUser(
+      _followingList.add(AppUser(
           uid: "123456",
           name: "Rahul Ghosh",
           location: 'Dum Dum',
           email: 'rahulghosh123@gmail.com'));
-      followingList.add(AppUser(
+      _followingList.add(AppUser(
           uid: "123456",
           name: "Rahul Ghosh",
           location: 'Dum Dum',
