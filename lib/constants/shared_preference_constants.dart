@@ -4,5 +4,7 @@ class Constants {
   static const MongoDbUserEmail = "useremail";
   static const MongoDbUserPhoto = "userphoto";
   static const MongoDbUserBio = "userbio";
+  static const MongoUserFollowers = "followers";
+  static const MongoUserFollowing = "following";
   static const FirebaseUserUid = "uid";
 }
