@@ -14,6 +14,7 @@ class MongoUser {
   late List<Following>? following;
   late List<Following>? followers;
   late int iV;
+  late String profileImage;
 
   MongoUser(
       {this.location,
@@ -30,6 +31,8 @@ class MongoUser {
       required this.email,
       this.following,
       this.followers,
+      this.profileImage =
+          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
       required this.iV});
 
   MongoUser.fromJson(Map<String, dynamic> json) {
@@ -63,19 +66,27 @@ class MongoUser {
       followers = List.empty();
     }
     iV = json['__v'];
+    profileImage = json['profileImage'] ?? profileImage;
   }
 }
 
 class Location {
   late String type;
   late List<double> coordinates;
-
-  Location({required this.type, required this.coordinates});
+  late String address;
+  late String description;
+  Location(
+      {required this.type,
+      required this.coordinates,
+      required this.address,
+      this.description = ''});
 
   Location.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     coordinates =
         json['coordinates'] == [] ? [] : json['coordinates'].cast<double>();
+    address = json['address'] == null ? '' : json['address'];
+    description = json['description'] == null ? '' : json['description'];
   }
 }
 
@@ -83,7 +94,6 @@ class Following {
   late String sId;
   late String refUserId;
   late String refUserName;
-
   Following(
       {required this.sId, required this.refUserId, required this.refUserName});
 
