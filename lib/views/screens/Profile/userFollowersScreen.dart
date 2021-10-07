@@ -22,12 +22,11 @@ class _UserFollowersScreenState extends State<UserFollowersScreen> {
   void initState() {
     super.initState();
     SharedPreferences.getInstance().then((prefs) {
-      print('fetch shared preference');
       setState(() {
         followers = prefs.getStringList(Constants.MongoUserFollowers)!;
       });
+      fetchUserFollowers();
     });
-    fetchUserFollowers();
   }
 
   @override
