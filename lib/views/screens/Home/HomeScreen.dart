@@ -211,9 +211,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: CachedNetworkImage(
                                 imageUrl: bannerImages[itemIndex],
                                 placeholder: (context, url) =>
-                                    CircularProgressIndicator(),
+                                    Center(child: CircularProgressIndicator()),
                                 errorWidget: (context, url, error) =>
                                     Icon(Icons.error),
+                                fit: BoxFit.fill,
                               ),
                             ),
                           ),
