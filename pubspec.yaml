@@ -27,6 +27,8 @@ dependencies:
   firebase_core: ^1.6.0
   firebase_auth: ^3.1.0
   cloud_firestore: ^2.5.1
+  firebase_messaging: ^10.0.8
+  firebase_storage: ^10.0.3
   google_sign_in: ^5.0.7
   shared_preferences: ^2.0.7
   otp_text_field: ^1.1.1
@@ -39,8 +41,8 @@ dependencies:
   intl: ^0.17.0
   multi_select_flutter: ^4.0.0
   geolocator: ^7.6.2
+  geocoding: ^2.0.1
   path_provider: ^2.0.5
-  firebase_storage: ^10.0.3
   provider: ^6.0.0
   sqflite: ^2.0.0+4
   email_validator: ^2.0.1
