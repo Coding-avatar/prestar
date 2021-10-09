@@ -60,7 +60,6 @@ class _UserFollowersScreenState extends State<UserFollowersScreen> {
   }
 
   void fetchUserFollowers() {
-    print('into fetch followers block');
     setState(() {
       _isLoading = true;
     });
