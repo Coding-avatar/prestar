@@ -34,38 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late String appVersion;
   List<PostData> _postData = List.empty(growable: true);
   List bannerImages = List.empty(growable: true);
-  List bannerVideos = [
-    {
-      'thumbnail':
-          'https://images.pexels.com/videos/1526909/pictures/preview-0.jpg',
-      'video':
-          "https://player.vimeo.com/external/296210754.sd.mp4?s=9db41d71fa61a2cc19757f656fc5c5c5ef9f69ec&profile_id=164&oauth2_token_id=57447761"
-    },
-    {
-      'thumbnail':
-          'https://images.pexels.com/videos/1510090/pictures/preview-0.jpg',
-      'video':
-          "https://player.vimeo.com/external/295482071.sd.mp4?s=238ca35e1e9ae91fd08ce5e290c1f168c7f1fe1b&profile_id=164&oauth2_token_id=57447761"
-    },
-    {
-      'thumbnail':
-          "https://images.pexels.com/videos/1494284/pictures/preview-0.jpg",
-      'video':
-          "https://player.vimeo.com/external/294394804.sd.mp4?s=0ae63fad00aa2702fd154632d9ed93fb7d7ee543&profile_id=164&oauth2_token_id=57447761"
-    },
-    {
-      'thumbnail':
-          "https://images.pexels.com/videos/856973/pictures/preview-0.jpg",
-      'video':
-          "https://player.vimeo.com/external/226685105.sd.mp4?s=90e56fbbb50fbc68a850f8db3f051c7465bfef71&profile_id=164&oauth2_token_id=57447761"
-    },
-    {
-      'thumbnail':
-          "https://images.pexels.com/videos/856065/pictures/preview-0.jpg",
-      'video':
-          "https://player.vimeo.com/external/214503838.sd.mp4?s=0aac7d3caa1d5eedbd97234814b1ca37904b71b2&profile_id=164&oauth2_token_id=57447761"
-    },
-  ];
+  List bannerVideos = List.empty(growable: true);
   late String email;
   @override
   void initState() {
@@ -76,7 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         appVersion = packageInfo.version;
       });
-      print('build number : ${packageInfo.buildNumber}');
     });
     fetchBannerList();
     fillData();
