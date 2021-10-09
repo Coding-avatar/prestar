@@ -1,5 +1,5 @@
 class MongoUser {
-  late Location? location;
+  late UserLocation? location;
   late List<String>? preferences;
   late List<String>? businessCategories;
   late List<String>? businessLogos;
@@ -36,8 +36,9 @@ class MongoUser {
       required this.iV});
 
   MongoUser.fromJson(Map<String, dynamic> json) {
-    location =
-        json['location'] == [] ? null : new Location.fromJson(json['location']);
+    location = json['location'] == []
+        ? null
+        : new UserLocation.fromJson(json['location']);
     preferences = json['preferences'].cast<String>();
     businessCategories = json['businessCategories'].cast<String>();
     businessLogos = json['businessLogos'].cast<String>();
@@ -72,18 +73,18 @@ class MongoUser {
   }
 }
 
-class Location {
+class UserLocation {
   late String type;
   late List<double> coordinates;
   late String address;
   late String description;
-  Location(
+  UserLocation(
       {required this.type,
       required this.coordinates,
       required this.address,
       this.description = ''});
 
-  Location.fromJson(Map<String, dynamic> json) {
+  UserLocation.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     coordinates =
         json['coordinates'] == [] ? [] : json['coordinates'].cast<double>();
