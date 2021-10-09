@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:prestar/constants/api_constants.dart';
@@ -13,7 +14,17 @@ class HttpService {
               'Content-Type': 'application/json; charset=UTF-8',
             },
             body: jsonEncode({"email": email}));
-    print('Login user response: ${res.body}');
+    // print('Login user response: ${res.body}');
+    return res;
+  }
+
+  Future<http.Response> findUser({required String uid}) async {
+    http.Response res = await http.get(
+        Uri.parse(ApiConstants.Base_url + '/users/$uid'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        });
+    print('Find user response: ${res.body}');
     return res;
   }
 
@@ -40,16 +51,29 @@ class HttpService {
     return res;
   }
 
-  Future<List<double>> getCurrentLocation() async {
-    var permission = await Geolocator.requestPermission();
+  Future<UserLocation> getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+    }
+    permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.whileInUse ||
         permission == LocationPermission.always) {
-      var position = await Geolocator.getCurrentPosition(
+      Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
-      var coordinates = [position.latitude, position.longitude];
-      return coordinates;
+      List<Placemark> placemark =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
+      Placemark place = placemark[0];
+      return UserLocation(
+          type: "Point",
+          coordinates: [position.latitude, position.longitude],
+          address: place.subLocality!,
+          description: place.street!);
     }
-    return [];
+    return UserLocation(
+        type: "Point", coordinates: [], address: '', description: '');
   }
 
   Future<http.Response> registerUserWithGoogle({
@@ -110,7 +134,7 @@ class HttpService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-    print('Fetch All Users Response: ${res.body}');
+    // print('Fetch All Users Response: ${res.body}');
     return res;
   }
 
