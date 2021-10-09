@@ -1,13 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:prestar/constants/shared_preference_constants.dart';
+import 'package:prestar/models/api_models/mongoUser.dart';
+import 'package:prestar/services/HttpService.dart';
 import 'package:prestar/services/auth_provider.dart';
 import 'package:prestar/views/custom_widgets/errorDialog.dart';
 import 'package:prestar/views/screens/Profile/SettingsScreen.dart';
 import 'package:prestar/views/screens/Profile/EditProfile/editProfileScreen.dart';
-import 'package:prestar/views/custom_widgets/videoPost.dart';
 import 'package:prestar/views/screens/Profile/userFollowersScreen.dart';
 import 'package:prestar/views/screens/Profile/userFollowingScreen.dart';
 import 'package:prestar/views/screens/Profile/userPostScreen.dart';
@@ -26,17 +29,69 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late String uid;
+
+  ///Default values
   String userName = "Rima Dutta", userLocation = "Kolkata";
-  int userAge = 27;
+  int userAge = 0;
+  String profilePic =
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
 
   String userFollowing = "231",
       userFollowers = '1.3k',
-      userVideos = '56',
+      userVideos = '56', //TODO fetch user video count
       userPosts = '151';
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((prefs) =>
-        print('User uid ${prefs.getString(Constants.FirebaseUserUid)}'));
+    SharedPreferences.getInstance().then((prefs) {
+      uid = prefs.getString(Constants.MongoDbUser)!;
+      setState(() {});
+      fetchProfileData(prefs.getString(Constants.MongoDbUser)!);
+    });
+  }
+
+  String countRepresentation(int count) {
+    if (count > 1000 && count < 1000000) {
+      return (count / 1000).floor().toString() + 'k';
+    } else if (count > 1000000) {
+      return (count / 1000000).floor().toString() + 'M';
+    } else {
+      return count.toString();
+    }
+  }
+
+  Future<void> fetchProfileData(String uid) async {
+    HttpService().findUser(uid: uid).then((res) {
+      MongoUser currentUser = MongoUser.fromJson(jsonDecode(res.body));
+      setState(() {
+        userName = currentUser.name;
+        userLocation = currentUser.location!.address;
+        userAge = 24; //find difference from date of birth
+        userFollowers = countRepresentation(currentUser.followers!.length);
+        userFollowing = countRepresentation(currentUser.following!.length);
+        profilePic = currentUser.profileImage;
+      });
+    });
+    HttpService().fetchAllPostOfUser(uid: uid).then((res) {
+      if (res.statusCode == 200) {
+        var responseJson = jsonDecode(res.body);
+        int count = 0;
+        responseJson.forEach((data) {
+          count++;
+        });
+        setState(() {
+          userPosts = count.toString();
+        });
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return ErrorDialog(
+                  titleText: "Network Error",
+                  errorMessage: "Sorry could not fetch posts");
+            });
+      }
+    });
   }
 
   @override
@@ -115,8 +170,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Stack(
                             children: [
                               CircleAvatar(
-                                backgroundImage:
-                                    AssetImage("assets/images/profile2.jpg"),
+                                backgroundImage: NetworkImage(profilePic),
                                 radius: 55,
                               ),
                               PositionedDirectional(
@@ -406,12 +460,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     physics: NeverScrollableScrollPhysics(),
                     children: [
                       UserFollowingScreen(
-                        uid: 'user whose following to display',
+                        uid: uid,
                       ),
-                      UserFollowersScreen(
-                          uid: 'user whose followers to display'),
-                      UserVideosScreen(uid: 'user whose videos to display'),
-                      UserPostScreen(uid: 'user whose post is to be displayed'),
+                      UserFollowersScreen(uid: uid),
+                      UserVideosScreen(uid: uid),
+                      UserPostScreen(uid: uid),
                     ],
                   ),
                 )
