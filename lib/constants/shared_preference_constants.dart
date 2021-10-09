@@ -7,4 +7,5 @@ class Constants {
   static const MongoUserFollowers = "followers";
   static const MongoUserFollowing = "following";
   static const FirebaseUserUid = "uid";
+  static const SHARED_PREF_FCM_TOKEN = "fcmtoken";
 }
